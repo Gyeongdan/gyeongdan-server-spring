@@ -1,7 +1,7 @@
 package gyeongdan.article.service;
 
 import gyeongdan.article.domain.Article;
-import gyeongdan.article.dto.ArticleCreateRequest;
+import gyeongdan.article.dto.ArticleUpdateRequest;
 import gyeongdan.article.repository.ArticleRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +27,19 @@ public class ArticleService {
         return articleRepository.findAll();
     }
 
-    public Article saveArticle(ArticleCreateRequest article) {
-        return articleRepository.save(article.toEntity());
+
+    public Article validateArticle(Long id) {
+        Article article = articleRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("해당 ID의 게시글이 존재하지 않습니다."));
+        article.setIsValid(true);
+        return articleRepository.save(article);
     }
 
+    public Long updateArticle(ArticleUpdateRequest articleUpdateRequest) {
+        Article article = articleRepository.findById(articleUpdateRequest.getId())
+            .orElseThrow(() -> new IllegalArgumentException("해당 ID의 게시글이 존재하지 않습니다."));
+        article.setTitle(articleUpdateRequest.getTitle());
+        article.setContent(articleUpdateRequest.getContent());
+        return articleRepository.save(article).getId();
+    }
 }
