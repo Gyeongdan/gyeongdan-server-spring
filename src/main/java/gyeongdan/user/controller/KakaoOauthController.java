@@ -16,12 +16,16 @@ public class KakaoOauthController {
         this.kakaoOauthService = kakaoOauthService;
     }
 
-    @GetMapping("/kakao/oauth")
-    public String kakaoOauth() {
-        return kakaoOauthService.getKakaoLoginUrl();
+    @GetMapping("/login")
+    public ResponseEntity<?> loginForm() {
+        return ResponseEntity
+            .ok()
+            .body(new CommonResponse<>(
+                kakaoOauthService.getKakaoLoginUrl(), "카카오 로그인 URL 생성 성공", true
+            ));
     }
 
-    @GetMapping("/kakao-login")
+    @GetMapping("/login/oauth2/code/kakao")
     public ResponseEntity<?> kakaoOauthCallback(@RequestParam String code) {
         return ResponseEntity
             .ok()
@@ -30,7 +34,7 @@ public class KakaoOauthController {
             ));
     }
 
-    @GetMapping("/get-user-info")
+    @GetMapping("/user-info")
     public ResponseEntity<?> getUserInfo(@RequestParam String accessToken) {
         return ResponseEntity
             .ok()

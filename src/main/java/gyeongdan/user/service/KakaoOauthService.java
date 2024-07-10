@@ -57,15 +57,13 @@ public class KakaoOauthService {
 
         String uri = "https://kauth.kakao.com/oauth/token?" + queryString;
 
-        KakaoLoginResponseDTO result = restClient
+        return restClient
             .build()
             .post()
             .uri(uri)
             .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
             .retrieve()
             .body(KakaoLoginResponseDTO.class);
-
-        return result;
     }
 
     public KakaoProfile getUserInfo(String accessToken) {

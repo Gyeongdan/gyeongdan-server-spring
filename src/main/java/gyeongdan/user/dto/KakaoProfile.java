@@ -1,8 +1,11 @@
 package gyeongdan.user.dto;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 
 @Data
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class KakaoProfile {
 
     private long id;
@@ -11,6 +14,7 @@ public class KakaoProfile {
     private KakaoAccount kakaoAccount;
 
     @Data
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Properties {
 
         private String nickname;
@@ -19,6 +23,7 @@ public class KakaoProfile {
     }
 
     @Data
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class KakaoAccount {
 
         private boolean profileNicknameNeedsAgreement;
@@ -26,6 +31,7 @@ public class KakaoProfile {
         private Profile profile;
 
         @Data
+        @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
         public static class Profile {
 
             private String nickname;
