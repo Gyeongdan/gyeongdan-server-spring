@@ -2,11 +2,15 @@ package gyeongdan.user.service;
 
 import gyeongdan.user.dto.KakaoLoginResponseDTO;
 import gyeongdan.user.dto.KakaoProfile;
+import gyeongdan.user.dto.KakaoTokenInfo;
+import gyeongdan.user.exception.UserException;
+import gyeongdan.util.ErrorCode;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -99,6 +103,21 @@ public class KakaoOauthService {
         userManageService.addUser(profile.getProperties().getNickname(), profile.getId());
 
         return tokenResponse;
+    }
+
+    public KakaoTokenInfo validateToken(String accessToken) {
+        String uri = "https://kapi.kakao.com/v1/user/access_token_info";
+        return restClient
+            .build()
+            .get()
+            .uri(uri)
+            .header("Authorization", "Bearer " + accessToken)
+            .retrieve()
+            .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
+                    throw new UserException(ErrorCode.LOGIN_TOKEN_INVALID);
+                }
+            )
+            .body(KakaoTokenInfo.class);
     }
 }
 
