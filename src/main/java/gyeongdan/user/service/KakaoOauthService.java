@@ -100,7 +100,8 @@ public class KakaoOauthService {
         KakaoProfile profile = getKakaoUserProfile(accessToken);
 
         // 3. 사용자 정보 저장
-        userManageService.addUser(profile.getProperties().getNickname(), profile.getId());
+        userManageService.addUser(profile.getProperties().getNickname(), profile.getId(),
+            profile.getProperties().getProfileImage());
 
         return tokenResponse;
     }

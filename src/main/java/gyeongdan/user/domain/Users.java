@@ -24,5 +24,6 @@ public class Users {
     Long id;
     String name;
     Long kakaoUserId;
+    String profileImage;
 
 }
