@@ -25,12 +25,22 @@ public class KakaoOauthController {
             ));
     }
 
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout(@RequestParam String accessToken) {
+        kakaoOauthService.getKakaoLogout(accessToken);
+        return ResponseEntity
+            .ok()
+            .body(new CommonResponse<>(null, "로그아웃 성공", true));
+    }
+
+
     @GetMapping("/login/oauth2/code/kakao")
     public ResponseEntity<?> kakaoOauthCallback(@RequestParam String code) {
+
         return ResponseEntity
             .ok()
             .body(new CommonResponse<>(
-                kakaoOauthService.getKakaoAccessToken(code), "카카오 로그인 성공", true
+                kakaoOauthService.processKakaoLogin(code), "카카오 로그인 성공", true
             ));
     }
 
@@ -39,7 +49,7 @@ public class KakaoOauthController {
         return ResponseEntity
             .ok()
             .body(new CommonResponse<>(
-                kakaoOauthService.getUserInfo(accessToken), "유저 정보 조회 성공", true
+                kakaoOauthService.getKakaoUserProfile(accessToken), "유저 정보 조회 성공", true
             ));
     }
 

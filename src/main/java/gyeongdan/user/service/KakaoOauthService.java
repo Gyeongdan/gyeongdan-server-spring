@@ -4,14 +4,15 @@ import gyeongdan.user.dto.KakaoLoginResponseDTO;
 import gyeongdan.user.dto.KakaoProfile;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestClient.Builder;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class KakaoOauthService {
 
     @Value("${kakao.client.id}")
@@ -21,10 +22,7 @@ public class KakaoOauthService {
     private String redirectUri;
 
     private final RestClient.Builder restClient;
-
-    public KakaoOauthService(Builder restClient) {
-        this.restClient = restClient;
-    }
+    private final UserManageService userManageService;
 
     public String getKakaoLoginUrl() {
         Map<String, String> queryparams = Map.of(
@@ -42,7 +40,6 @@ public class KakaoOauthService {
     }
 
     public KakaoLoginResponseDTO getKakaoAccessToken(String code) {
-
         Map<String, String> queryParams = Map.of(
             "grant_type", "authorization_code",
             "client_id", clientId,
@@ -66,7 +63,7 @@ public class KakaoOauthService {
             .body(KakaoLoginResponseDTO.class);
     }
 
-    public KakaoProfile getUserInfo(String accessToken) {
+    public KakaoProfile getKakaoUserProfile(String accessToken) {
         String uri = "https://kapi.kakao.com/v2/user/me";
 
         return restClient
@@ -76,6 +73,32 @@ public class KakaoOauthService {
             .header("Authorization", "Bearer " + accessToken)
             .retrieve()
             .body(KakaoProfile.class);
+    }
+
+    public void getKakaoLogout(String accessToken) {
+        String uri = "https://kapi.kakao.com/v1/user/logout";
+
+        restClient
+            .build()
+            .post()
+            .uri(uri)
+            .header("Authorization", "Bearer " + accessToken)
+            .retrieve()
+            .body(KakaoProfile.class);
+    }
+
+    public KakaoLoginResponseDTO processKakaoLogin(String code) {
+        // 1. 카카오에서 액세스 토큰 획득
+        KakaoLoginResponseDTO tokenResponse = getKakaoAccessToken(code);
+        String accessToken = tokenResponse.getAccessToken();
+
+        // 2. 액세스 토큰을 사용하여 사용자 프로필 가져오기
+        KakaoProfile profile = getKakaoUserProfile(accessToken);
+
+        // 3. 사용자 정보 저장
+        userManageService.addUser(profile.getProperties().getNickname(), profile.getId());
+
+        return tokenResponse;
     }
 }
 
