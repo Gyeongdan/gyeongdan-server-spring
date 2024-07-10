@@ -21,6 +21,7 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven { url = uri("https://jitpack.io") }
 }
 
 dependencies {
@@ -35,10 +36,13 @@ dependencies {
     // PostgreSQL Driver
     implementation("org.postgresql:postgresql:42.6.0")
 
-    // OpenAI-Java 외부 라이브러리 추가 (GPT-4o 사용을 위한 최신 버전)
-    implementation("com.theokanning.openai-gpt3-java:api:0.18.2") // API 모듈 추가
-    implementation("com.theokanning.openai-gpt3-java:client:0.18.2") // 클라이언트 모듈 추가
-    implementation("com.theokanning.openai-gpt3-java:service:0.18.2") // 서비스 모듈 추가
+    // OpenAI-Java 외부 라이브러리 추가 (GPT-4 사용을 위한 최신 버전)
+    implementation("com.theokanning.openai-gpt3-java:api:0.18.2")
+    implementation("com.theokanning.openai-gpt3-java:client:0.18.2")
+    implementation("com.theokanning.openai-gpt3-java:service:0.18.2")
+
+    // KOMORAN for Korean NLP
+    implementation("com.github.shin285:KOMORAN:3.3.4")
 
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
