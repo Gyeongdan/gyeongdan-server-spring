@@ -1,6 +1,7 @@
 package gyeongdan.user.service;
 
 import gyeongdan.user.dto.KakaoLoginResponseDTO;
+import gyeongdan.user.dto.KakaoProfile;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -67,7 +68,7 @@ public class KakaoOauthService {
         return result;
     }
 
-    public String getUserInfo(String accessToken) {
+    public KakaoProfile getUserInfo(String accessToken) {
         String uri = "https://kapi.kakao.com/v2/user/me";
 
         return restClient
@@ -76,7 +77,7 @@ public class KakaoOauthService {
             .uri(uri)
             .header("Authorization", "Bearer " + accessToken)
             .retrieve()
-            .body(String.class);
+            .body(KakaoProfile.class);
     }
 }
 
