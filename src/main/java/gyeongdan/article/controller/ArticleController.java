@@ -21,7 +21,7 @@ public class ArticleController {
 
     private final ArticleService articleService;
 
-    @GetMapping("")
+    @GetMapping("/detail")
     public ResponseEntity<?> getArticle(@RequestParam Long id) {
         Article article = articleService.getValidArticle(id);
         return ResponseEntity.ok(new CommonResponse<>(article, "게시글 조회 성공", true));
