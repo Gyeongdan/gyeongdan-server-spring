@@ -86,9 +86,9 @@ public class JwtUtil {
         return Jwts.parser().setSigningKey(generateKey()).build().parseClaimsJws(token).getBody().getSubject();
     }
 
-    public String getKakaoUserId(String token) {
+    public Long getKakaoUserId(String token) {
         Claims claims = Jwts.parser().setSigningKey(generateKey()).build().parseClaimsJws(token).getBody();
-        return (String) claims.get("kakaoUserId");
+        return  (Long)claims.get("kakaoUserId");
     }
 
     public String getRole(String token) {

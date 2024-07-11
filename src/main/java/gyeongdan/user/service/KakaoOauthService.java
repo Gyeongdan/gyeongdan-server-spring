@@ -85,12 +85,11 @@ public class KakaoOauthService {
 
     public void getKakaoLogout(String accessToken) {
         String uri = "https://kapi.kakao.com/v1/user/logout";
-
         restClient
             .build()
             .post()
             .uri(uri)
-            .header("Authorization", "Bearer " + accessToken)
+            .header("Authorization", "Authorization: KakaoAK " + accessToken)
             .retrieve()
             .body(KakaoProfile.class);
     }
