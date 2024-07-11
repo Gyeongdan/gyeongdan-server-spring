@@ -42,4 +42,10 @@ public class ArticleService {
         article.setContent(articleUpdateRequest.getContent());
         return articleRepository.save(article).getId();
     }
+
+    public List<Article> getValidArticles() {
+        return articleRepository.findAll().stream()
+            .filter(Article::getIsValid)
+            .toList();
+    }
 }
