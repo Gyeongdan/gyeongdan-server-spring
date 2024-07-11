@@ -11,17 +11,17 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 @RequiredArgsConstructor
-public class ManagerAspect {
+public class AdminAspect {
 
     @Autowired
     private HttpServletRequest request;
     private final JwtUtil jwtUtil;
 
     @Before("@annotation(roleAuthenticated)")
-    public void authorize(ManagerAuthenticated roleAuthenticated) {
+    public void authorize(AdminAuthenticated roleAuthenticated) {
         String token = jwtUtil.resolveToken(request);
         if (token == null || !jwtUtil.validateToken(token)) {
-            throw new RuntimeException("Access Token is missing");
+            throw new RuntimeException("Access Token이 유효하지 않습니다.");
         }
 
         String role = jwtUtil.getRole(token);
