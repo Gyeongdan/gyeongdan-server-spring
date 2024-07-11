@@ -33,6 +33,12 @@ dependencies {
     implementation("com.querydsl:querydsl-spatial:5.0.0")
     implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
 
+    // JWT
+    implementation("io.jsonwebtoken:jjwt-api:0.12.3")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.3")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.3")
+
+
     runtimeOnly("org.postgresql:postgresql:42.6.0")
 
 

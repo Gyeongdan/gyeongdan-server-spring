@@ -1,10 +1,13 @@
 package gyeongdan.user.service;
 
+import gyeongdan.user.domain.Users;
 import gyeongdan.user.dto.KakaoLoginResponseDTO;
 import gyeongdan.user.dto.KakaoProfile;
 import gyeongdan.user.dto.KakaoTokenInfo;
 import gyeongdan.user.exception.UserException;
 import gyeongdan.util.ErrorCode;
+import gyeongdan.util.JwtUtil;
+import gyeongdan.util.TokenResponse;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +30,7 @@ public class KakaoOauthService {
 
     private final RestClient.Builder restClient;
     private final UserManageService userManageService;
+    private final JwtUtil jwtUtil;
 
     public String getKakaoLoginUrl() {
         Map<String, String> queryparams = Map.of(
@@ -91,24 +95,28 @@ public class KakaoOauthService {
             .body(KakaoProfile.class);
     }
 
-    public KakaoLoginResponseDTO processKakaoLogin(String code) {
+    public TokenResponse processKakaoLogin(String code) {
         // 1. 카카오에서 액세스 토큰 획득
         KakaoLoginResponseDTO tokenResponse = getKakaoAccessToken(code);
         String accessToken = tokenResponse.getAccessToken();
 
         // 2. 액세스 토큰을 사용하여 사용자 프로필 가져오기
+        validateToken(accessToken);
         KakaoProfile profile = getKakaoUserProfile(accessToken);
 
         // 3. 사용자 정보 저장
-        userManageService.addUser(profile.getProperties().getNickname(), profile.getId(),
+        Users user = userManageService.addUser(profile.getProperties().getNickname(), profile.getId(),
             profile.getProperties().getProfileImage());
 
-        return tokenResponse;
+        // 4. JWT 액세스 토큰 및 리프레시 토큰 생성
+        TokenResponse token = jwtUtil.generateTokenResponse(user);
+
+        return token;
     }
 
-    public KakaoTokenInfo validateToken(String accessToken) {
+    public void validateToken(String accessToken) {
         String uri = "https://kapi.kakao.com/v1/user/access_token_info";
-        return restClient
+        restClient
             .build()
             .get()
             .uri(uri)

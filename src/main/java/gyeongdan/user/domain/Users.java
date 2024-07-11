@@ -20,6 +20,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
 public class Users {
 
     @Id
