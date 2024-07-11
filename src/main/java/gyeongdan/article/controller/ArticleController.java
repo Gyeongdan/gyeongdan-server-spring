@@ -4,6 +4,7 @@ import gyeongdan.article.domain.Article;
 import gyeongdan.article.dto.ArticleUpdateRequest;
 import gyeongdan.article.service.ArticleService;
 import gyeongdan.util.CommonResponse;
+import gyeongdan.util.annotation.AdminAuthenticated;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +28,16 @@ public class ArticleController {
         return ResponseEntity.ok(new CommonResponse<>(article, "게시글 조회 성공", true));
     }
 
+
     @GetMapping("")
     public ResponseEntity<?> getArticles() {
+        List<Article> article = articleService.getValidArticles();
+        return ResponseEntity.ok(new CommonResponse<>(article, "게시글 조회 성공", true));
+    }
+
+    @AdminAuthenticated
+    @GetMapping("/admin")
+    public ResponseEntity<?> getArticlesAdmin() {
         List<Article> article = articleService.getArticles();
         return ResponseEntity.ok(new CommonResponse<>(article, "게시글 조회 성공", true));
     }
