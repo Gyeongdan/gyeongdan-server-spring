@@ -23,7 +23,7 @@ public class KakaoOauthController {
             ));
     }
 
-    @GetMapping("/logout")
+    @GetMapping("/logout") // TODO: 매니저 방식으로 로그아웃 처리
     public ResponseEntity<?> logout(@RequestParam String accessToken) {
         kakaoOauthService.getKakaoLogout(accessToken);
         return ResponseEntity
@@ -41,14 +41,4 @@ public class KakaoOauthController {
                 kakaoOauthService.processKakaoLogin(code), "카카오 로그인 성공", true
             ));
     }
-
-    @GetMapping("/user-info")
-    public ResponseEntity<?> getUserInfo(@RequestParam String accessToken) {
-        return ResponseEntity
-            .ok()
-            .body(new CommonResponse<>(
-                kakaoOauthService.getKakaoUserProfile(accessToken), "유저 정보 조회 성공", true
-            ));
-    }
-
 }

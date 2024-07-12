@@ -1,4 +1,4 @@
-package gyeongdan.util;
+package gyeongdan.util.annotation;
 
 import gyeongdan.user.service.KakaoOauthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,7 +17,7 @@ public class LoginAspect {
     private HttpServletRequest request;
     private final KakaoOauthService kakaoService;
 
-    @Before("@annotation(gyeongdan.util.LoginAuthenticated)")
+    @Before("@annotation(gyeongdan.util.annotation.LoginAuthenticated)")
     public void authenticate() {
         String token = request.getHeader("Authorization");
         if (token == null) {

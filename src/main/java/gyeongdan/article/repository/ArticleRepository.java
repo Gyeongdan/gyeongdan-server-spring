@@ -1,10 +1,19 @@
 package gyeongdan.article.repository;
 
 import gyeongdan.article.domain.Article;
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ArticleRepository extends JpaRepository<Article, Long> {
+public interface ArticleRepository {
+
+
+    Optional<Article> findById(Long id);
+
+
+    List<Article> findAll();
+
+    Article save(Article article);
 
 }
