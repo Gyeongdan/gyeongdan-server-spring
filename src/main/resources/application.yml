@@ -5,6 +5,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        ddl-auto: update
     show_sql: true
 
 logging:
