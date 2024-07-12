@@ -1,7 +1,7 @@
-package gyeongdan.ChatBot.controller;
+package gyeongdan.chatBot.controller;
 
-import gyeongdan.ChatBot.model.EconomicTerm;
-import gyeongdan.ChatBot.service.EconomicTermCRUDService;
+import gyeongdan.chatBot.model.EconomicTerm;
+import gyeongdan.chatBot.service.EconomicTermCRUDService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package gyeongdan.ChatBot.utils;
+package gyeongdan.chatBot.common.utils;
 
 public class CmmUtil {
 

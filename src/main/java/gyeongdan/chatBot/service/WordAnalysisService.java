@@ -1,4 +1,4 @@
-package gyeongdan.ChatBot.service;
+package gyeongdan.chatBot.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL;
 import kr.co.shineware.nlp.komoran.core.Komoran;
 import kr.co.shineware.nlp.komoran.model.KomoranResult;
-import gyeongdan.ChatBot.utils.CmmUtil;
+import gyeongdan.chatBot.common.utils.CmmUtil;
 
 @Service
 public class WordAnalysisService {

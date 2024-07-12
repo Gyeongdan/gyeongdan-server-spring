@@ -1,6 +1,6 @@
-package gyeongdan.ChatBot.controller;
+package gyeongdan.chatBot.controller;
 
-import gyeongdan.ChatBot.service.EconomicTermService;
+import gyeongdan.chatBot.service.EconomicTermService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

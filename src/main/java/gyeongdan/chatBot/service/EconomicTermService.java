@@ -1,7 +1,7 @@
-package gyeongdan.ChatBot.service;
+package gyeongdan.chatBot.service;
 
-import gyeongdan.ChatBot.model.EconomicTerm;
-import gyeongdan.ChatBot.repository.EconomicTermRepository;
+import gyeongdan.chatBot.model.EconomicTerm;
+import gyeongdan.chatBot.repository.EconomicTermRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
