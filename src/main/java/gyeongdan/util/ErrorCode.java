@@ -1,11 +1,11 @@
 package gyeongdan.util;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter
 public enum ErrorCode {
-    // User ErrorMessage
-    LOGIN_FAILED("로그인에 실패하였습니다.", HttpStatus.UNAUTHORIZED),
-    USER_NOT_FOUND("유저를 찾을 수 없습니다.", HttpStatus.UNAUTHORIZED);
+    LOGIN_TOKEN_INVALID("로그인 토큰이 유효하지 않습니다.", HttpStatus.UNAUTHORIZED);
 
     private final String message;
     private final HttpStatus status;
@@ -15,11 +15,4 @@ public enum ErrorCode {
         this.status = status;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public HttpStatus getStatus() {
-        return status;
-    }
 }

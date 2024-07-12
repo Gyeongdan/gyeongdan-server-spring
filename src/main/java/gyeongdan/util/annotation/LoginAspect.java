@@ -1,6 +1,8 @@
-package gyeongdan.util;
+package gyeongdan.util.annotation;
 
+import gyeongdan.user.service.KakaoOauthService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,25 +10,20 @@ import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-public class JwtAspect {
-
-    @Autowired
-    private JwtUtil jwtUtil;
+@RequiredArgsConstructor
+public class LoginAspect {
 
     @Autowired
     private HttpServletRequest request;
+    private final KakaoOauthService kakaoService;
 
-    @Before("@annotation(gyeongdan.util.JwtAuthenticated)")
+    @Before("@annotation(gyeongdan.util.annotation.LoginAuthenticated)")
     public void authenticate() {
         String token = request.getHeader("Authorization");
         if (token == null) {
-            throw new RuntimeException("JWT Token is missing");
+            throw new RuntimeException("Access Token is missing");
         }
 
-        String email = jwtUtil.extractUsername(token);
-
-        if (!jwtUtil.validateToken(token, email)) {
-            throw new RuntimeException("JWT Token is not valid");
-        }
+        kakaoService.validateToken(token);
     }
 }

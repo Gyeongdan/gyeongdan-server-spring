@@ -28,10 +28,19 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
 
-    // JWT Token
-    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
-    implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
-    implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
+    // QueryDSL
+    implementation("com.querydsl:querydsl-collections:5.0.0")
+    implementation("com.querydsl:querydsl-spatial:5.0.0")
+    implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+
+    // JWT
+    implementation("io.jsonwebtoken:jjwt-api:0.12.3")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.3")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.3")
+
+
+    runtimeOnly("org.postgresql:postgresql:42.6.0")
+
 
     // PostgreSQL Driver
     implementation("org.postgresql:postgresql:42.6.0")
