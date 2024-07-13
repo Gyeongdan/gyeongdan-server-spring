@@ -1,4 +1,4 @@
-package gyeongdan.ChatBot.model;
+package gyeongdan.chatBot.gpt.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
