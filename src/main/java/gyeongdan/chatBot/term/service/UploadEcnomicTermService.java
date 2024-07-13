@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gyeongdan.chatBot.term.model.EconomicTerm;
 import gyeongdan.chatBot.term.repository.EconomicTermRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -17,13 +18,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UploadEcnomicTermService {
     private static final Logger logger = LoggerFactory.getLogger(UploadEcnomicTermService.class);
     private final EconomicTermRepository economicTermRepository;
-
-    public UploadEcnomicTermService(EconomicTermRepository economicTermRepository) {
-        this.economicTermRepository = economicTermRepository;
-    }
 
     @Transactional
     public void saveEconomicTermsFromJsonFile(String filePath) {

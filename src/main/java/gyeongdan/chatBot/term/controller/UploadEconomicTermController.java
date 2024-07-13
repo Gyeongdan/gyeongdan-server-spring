@@ -1,6 +1,7 @@
 package gyeongdan.chatBot.term.controller;
 
 import gyeongdan.chatBot.term.service.UploadEcnomicTermService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,12 +16,10 @@ import java.nio.file.Path;
 
 @RestController
 @RequestMapping("/chatbot/terms")
+@RequiredArgsConstructor
 public class UploadEconomicTermController {
     private static final Logger logger = LoggerFactory.getLogger(UploadEconomicTermController.class);
     private final UploadEcnomicTermService economicTermService;
-    public UploadEconomicTermController(UploadEcnomicTermService economicTermService) {
-        this.economicTermService = economicTermService;
-    }
 
     @PostMapping("/upload")
     public String uploadEconomicTerms(@RequestParam("file") MultipartFile file) {

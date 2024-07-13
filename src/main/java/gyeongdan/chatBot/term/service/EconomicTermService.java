@@ -2,22 +2,19 @@ package gyeongdan.chatBot.term.service;
 
 import gyeongdan.chatBot.term.model.EconomicTerm;
 import gyeongdan.chatBot.term.repository.EconomicTermRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class EconomicTermService {
 
     private final EconomicTermRepository economicTermRepository;
     private final WordAnalysisService wordAnalysisService;
-
-    public EconomicTermService(EconomicTermRepository economicTermRepository, WordAnalysisService wordAnalysisService) {
-        this.economicTermRepository = economicTermRepository;
-        this.wordAnalysisService = wordAnalysisService;
-    }
-
+    
     public String findEconomicTerm(String question) throws Exception {
         Map<String, Integer> kor_keywords = extractKeywords(question);
 
