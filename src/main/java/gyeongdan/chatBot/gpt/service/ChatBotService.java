@@ -1,7 +1,7 @@
-package gyeongdan.chatBot.service;
+package gyeongdan.chatBot.gpt.service;
 
-import gyeongdan.chatBot.model.GptResponse;
-import gyeongdan.chatBot.repository.ChatBotRepository;
+import gyeongdan.chatBot.gpt.model.GptResponse;
+import gyeongdan.chatBot.gpt.repository.ChatBotRepository;
 import org.springframework.stereotype.Service;
 
 @Service

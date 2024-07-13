@@ -1,9 +1,6 @@
-package gyeongdan.chatBot.model;
+package gyeongdan.chatBot.term.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,8 +18,11 @@ public class EconomicTerm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    // 경제 용어 이름
+    @Column(unique = true)
     private String term;
+    // 쉬운 경제 용어 설명
     private String description;
+    // 경제 용어 사용 예시 문장
     private String example;
 }

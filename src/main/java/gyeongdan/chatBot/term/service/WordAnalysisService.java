@@ -1,4 +1,4 @@
-package gyeongdan.chatBot.service;
+package gyeongdan.chatBot.term.service;
 
 import java.util.ArrayList;
 import java.util.Collections;

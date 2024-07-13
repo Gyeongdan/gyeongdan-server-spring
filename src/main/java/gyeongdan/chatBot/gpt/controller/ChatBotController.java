@@ -1,6 +1,6 @@
-package gyeongdan.chatBot.controller;
+package gyeongdan.chatBot.gpt.controller;
 
-import gyeongdan.chatBot.service.ChatBotService;
+import gyeongdan.chatBot.gpt.service.ChatBotService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
