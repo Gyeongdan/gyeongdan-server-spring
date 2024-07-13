@@ -17,12 +17,12 @@ public class EconomicTermService {
     private final EconomicTermRepository economicTermRepository;
     private final MorphologicalAnalysisService wordAnalysisService;
     
-    public CommonResponse<Map<String, String>> findEconomicTerm(String question) throws Exception {
+    public Map<String, String> findEconomicTerm(String question) throws Exception {
         Map<String, Integer> korKeywords = wordAnalysisService.extractKorWords(question);
         List<EconomicTerm> terms = economicTermRepository.findAll();
 
         // 1. 한국어 형태소 분석기를 통해 추출한 단어와 경제 용어 객체의 term 필드를 비교하여 일치하는지 확인
-        CommonResponse<Map<String, String>> response = findTermByKeywords(korKeywords, terms);
+        Map<String, String> response = findTermByKeywords(korKeywords, terms);
         if (response != null) {
             return response;
         }
@@ -37,15 +37,15 @@ public class EconomicTermService {
         // 추가 로직이 필요할 경우 여기에 작성
 
         // 4. 실패문
-        return new CommonResponse<>(null, "경단어 찾기 실패", false);
+        return null;
     }
 
     // 1.
-    private CommonResponse<Map<String, String>> findTermByKeywords(Map<String, Integer> keywords, List<EconomicTerm> terms) {
+    private Map<String, String> findTermByKeywords(Map<String, Integer> keywords, List<EconomicTerm> terms) {
         for (EconomicTerm term : terms) {
             for (String keyword : keywords.keySet()) {
                 if (term.getTerm().equalsIgnoreCase(keyword)) {
-                    return createResponse(term, "경단어 찾기 성공");
+                    return createResponse(term);
                 }
             }
         }
@@ -53,20 +53,20 @@ public class EconomicTermService {
     }
 
     // 2.
-    private CommonResponse<Map<String, String>> findTermByQuestion(String question, List<EconomicTerm> terms) {
+    private Map<String, String> findTermByQuestion(String question, List<EconomicTerm> terms) {
         for (EconomicTerm term : terms) {
             if (term.getTerm().equalsIgnoreCase(question)) {
-                return createResponse(term, "경단어 찾기 성공");
+                return createResponse(term);
             }
         }
         return null;
     }
 
-    private CommonResponse<Map<String, String>> createResponse(EconomicTerm term, String message) {
+    private Map<String, String> createResponse(EconomicTerm term) {
         Map<String, String> responseMap = new HashMap<>();
         responseMap.put("term", term.getTerm());
         responseMap.put("description", term.getDescription());
         responseMap.put("example", term.getExample());
-        return new CommonResponse<>(responseMap, message, true);
+        return responseMap;
     }
 }
