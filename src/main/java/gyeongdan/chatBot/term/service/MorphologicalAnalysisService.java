@@ -19,9 +19,9 @@ import kr.co.shineware.nlp.komoran.model.KomoranResult;
 import gyeongdan.chatBot.common.utils.CmmUtil;
 
 @Service
-public class WordAnalysisService {
+public class MorphologicalAnalysisService {
 
-    private static final Logger logger = LoggerFactory.getLogger(WordAnalysisService.class);
+    private static final Logger logger = LoggerFactory.getLogger(MorphologicalAnalysisService.class);
 
     // 자연어 처리 - 형태소 분석기인 Komoran를 메모리에 올리기 위해 WordAnalysisService 클래스 내 전역 변수로 설정합니다.
     Komoran nlp = null;
@@ -30,7 +30,7 @@ public class WordAnalysisService {
     // 톰켓이 메모리에 올릴 때, 생성자에 선언한 Komoran도 같이 메모리에 올라가도록 생성자에 코딩합니다.
     // 생성자에서 Komoran을 메모리에 올리면, 매번 메모리에 올려서 호출하는 것이 아니라,
     // 메모리에 올리간 객체만 불러와서 사용할 수 있기 때문에 처리 속도가 빠릅니다.
-    public WordAnalysisService() {
+    public MorphologicalAnalysisService() {
 
         logger.info("{}.WordAnalysisService creator Start !", this.getClass().getName());
 
@@ -116,7 +116,7 @@ public class WordAnalysisService {
         return rMap;
     }
 
-    public Map<String, Integer> doWordAnalysis(String text) throws Exception {
+    public Map<String, Integer> extractKorWords(String text) throws Exception {
         // 문장의 명사를 추출하기 위한 형태소 분석 실행
         List<String> rList = this.doWordNouns(text);
 

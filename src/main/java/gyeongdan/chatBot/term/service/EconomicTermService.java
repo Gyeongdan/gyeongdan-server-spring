@@ -2,9 +2,11 @@ package gyeongdan.chatBot.term.service;
 
 import gyeongdan.chatBot.term.model.EconomicTerm;
 import gyeongdan.chatBot.term.repository.EconomicTermRepository;
+import gyeongdan.util.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,46 +15,58 @@ import java.util.Map;
 public class EconomicTermService {
 
     private final EconomicTermRepository economicTermRepository;
-    private final WordAnalysisService wordAnalysisService;
+    private final MorphologicalAnalysisService wordAnalysisService;
     
-    public String findEconomicTerm(String question) throws Exception {
-        Map<String, Integer> kor_keywords = extractKeywords(question);
-
-
+    public Map<String, String> findEconomicTerm(String question) throws Exception {
+        Map<String, Integer> korKeywords = wordAnalysisService.extractKorWords(question);
         List<EconomicTerm> terms = economicTermRepository.findAll();
 
-
-        // 질문 그자체
-        for (EconomicTerm term : terms) {
-            if (term.getTerm().equalsIgnoreCase(question)) {
-                return term.getDescription();
-            }
+        // 1. 한국어 형태소 분석기를 통해 추출한 단어와 경제 용어 객체의 term 필드를 비교하여 일치하는지 확인
+        Map<String, String> response = findTermByKeywords(korKeywords, terms);
+        if (response != null) {
+            return response;
         }
 
-        // 한국어 형태소 분석기와 비교
+        // 2. 질문 그 자체가 단어일 때 경제 용어 객체의 term 필드와 질문을 비교하여 일치하는지 확인
+        response = findTermByQuestion(question, terms);
+        if (response != null) {
+            return response;
+        }
+
+        // 3. 영어 단어 분석기를 통해 추출한 단어와 경제 용어 객체의 term 필드를 비교하여 일치하는지 확인
+        // 추가 로직이 필요할 경우 여기에 작성
+
+        // 4. 실패문
+        return null;
+    }
+
+    // 1.
+    private Map<String, String> findTermByKeywords(Map<String, Integer> keywords, List<EconomicTerm> terms) {
         for (EconomicTerm term : terms) {
-            // 경제 용어 객체의 term 필드와 keywords 리스트의 요소들을 비교하여 일치하는지 확인
-            for (String keyword : kor_keywords.keySet()) {
+            for (String keyword : keywords.keySet()) {
                 if (term.getTerm().equalsIgnoreCase(keyword)) {
-                    return formatResponse(term);
+                    return createResponse(term);
                 }
             }
         }
-
-        // 영어 단어 분석기와 비교
-
-
-        return "죄송합니다! 질문에서 관련된 경제 용어를 찾을 수 없습니다.";
+        return null;
     }
 
-    private String formatResponse(EconomicTerm term) {
-        return String.format("%s에 대해 설명해드리겠습니다! %s ex) %s",
-                term.getTerm(), term.getDescription(), term.getExample());
+    // 2.
+    private Map<String, String> findTermByQuestion(String question, List<EconomicTerm> terms) {
+        for (EconomicTerm term : terms) {
+            if (term.getTerm().equalsIgnoreCase(question)) {
+                return createResponse(term);
+            }
+        }
+        return null;
     }
 
-
-    public Map<String, Integer> extractKeywords(String question) throws Exception {
-
-        return wordAnalysisService.doWordAnalysis(question);
+    private Map<String, String> createResponse(EconomicTerm term) {
+        Map<String, String> responseMap = new HashMap<>();
+        responseMap.put("term", term.getTerm());
+        responseMap.put("description", term.getDescription());
+        responseMap.put("example", term.getExample());
+        return responseMap;
     }
 }
