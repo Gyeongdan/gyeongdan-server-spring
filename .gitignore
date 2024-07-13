@@ -57,3 +57,5 @@ logs
 src/main/generated
 
 application-secret.yml
+
+src/main/resources/static/economic_terms.json
