@@ -29,3 +29,9 @@ logging:
 
 jwt:
   secret_key: ${JWT_SECRET_KEY}
+
+
+
+kakao:
+  client.id: ${KAKAO_CLIENT_ID}
+  redirect.uri: ${KAKAO_REDIRECT_URI}
