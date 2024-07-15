@@ -111,6 +111,7 @@ jobs:
             JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
             KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}
             KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}
+            OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
           cache-from: type=gha
           cache-to: type=gha,mode=min,ignore-error=true
 

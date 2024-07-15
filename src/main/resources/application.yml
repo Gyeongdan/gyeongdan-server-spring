@@ -30,8 +30,9 @@ logging:
 jwt:
   secret_key: ${JWT_SECRET_KEY}
 
-
-
 kakao:
   client.id: ${KAKAO_CLIENT_ID}
   redirect.uri: ${KAKAO_REDIRECT_URI}
+
+openai:
+  api.key: ${OPENAI_API_KEY}
