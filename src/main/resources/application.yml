@@ -2,10 +2,26 @@ spring:
   application:
     name: gyeongdan
   jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
     properties:
       hibernate:
         format_sql: true
-    show_sql: true
+        enable_lazy_load_no_trans: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        hbm2ddl:
+          jdbc_metadata_extraction_strategy: individually
+        default_schema: ${SPRING_DATASOURCE_SCHEMA}
+  datasource:
+    hikari:
+      schema: ${SPRING_DATASOURCE_SCHEMA}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+
 
 logging:
   level:
