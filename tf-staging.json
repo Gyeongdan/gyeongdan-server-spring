@@ -1,0 +1,46 @@
+{
+    "family": "GyeongdanFastAPI",
+    "containerDefinitions": [
+        {
+            "name": "Spring",
+            "image": "730335311420.dkr.ecr.ap-northeast-2.amazonaws.com/gyeongdan-spring:latest",
+            "cpu": 512,
+            "portMappings": [
+                {
+                    "name": "spring-8080-tcp",
+                    "containerPort": 8080,
+                    "hostPort": 8080,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "ulimits": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/GyeongdanSpring",
+                    "awslogs-create-group": "true",
+                    "awslogs-region": "ap-northeast-2",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            }
+        }
+    ],
+    "taskRoleArn": "arn:aws:iam::730335311420:role/ecsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::730335311420:role/ecsTaskExecutionRole",
+    "networkMode": "bridge",
+    "requiresCompatibilities": [
+        "EC2"
+    ],
+    "cpu": "512",
+    "memory": "512",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    }
+}

@@ -1,0 +1,208 @@
+name: Deploy to Amazon ECS
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: [ "staging" ]
+
+env:
+  AWS_REGION: ap-northeast-2                      # AWS region 설정
+  ECR_REPOSITORY: gyeongdan-spring               # Amazon ECR repository 이름
+  ECS_SERVICE: GyeongdanSpring                   # Amazon ECS 서비스 이름
+  ECS_CLUSTER: Gyeongdan                          # Amazon ECS 클러스터 이름
+  ECS_TASK_DEFINITION: tf-staging.json  # Amazon ECS task definition 파일 경로
+  CONTAINER_NAME: Spring                         # 컨테이너 이름
+  PROGRESS_SLACK_CHANNEL: C07BRCDNBMF             # Slack 채널 ID
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Post Slack Channel that Build Start
+        id: slack-build-start
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          channel-id: ${{ env.PROGRESS_SLACK_CHANNEL }}
+          payload: |
+            {
+              "text": ":leaves: *Spring Spring ${{ github.ref_name }}* 배포가 시작되었습니다.",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":mega: *Gyeongdan Spring ${{ github.ref_name }}* 배포가 시작되었습니다."
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "emoji": true,
+                        "text": "깃허브액션에서 확인하기."
+                      },
+                      "value": "click_me_123",
+                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.PROGRESS_SLACK_CHANNEL_TOKEN }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Docker build & Push Docker image to Amazon ECR
+        id: build-image
+        uses: docker/build-push-action@v5
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        with:
+          context: .
+          push: true
+          tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+          build-args: |
+            DB_HOST=${{ secrets.DB_HOST }}
+            DB_USER=${{ secrets.DB_USER }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            DB_NAME=${{ secrets.DB_NAME }}
+            DB_PORT=${{ secrets.DB_PORT }}
+            OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=min,ignore-error=true
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        with:
+          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+
+      - name: Deploy Amazon ECS task definition
+        id: ecs-deploy
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
+          wait-for-minutes: 10
+
+      - name: Verify New Task Definition is Deployed
+        run: |
+          CURRENT_TASK_DEF_ARN=$(aws ecs describe-services --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE }} --query services[0].deployments[0].taskDefinition | jq -r ".")
+          NEW_TASK_DEF_ARN=${{ steps.ecs-deploy.outputs.task-definition-arn }}
+          echo "Current task arn: $CURRENT_TASK_DEF_ARN"
+          echo "New task arn: $NEW_TASK_DEF_ARN"
+          if [ "$CURRENT_TASK_DEF_ARN" != "$NEW_TASK_DEF_ARN" ]; then
+            echo "Deployment failed."
+            exit 1
+          fi
+
+      - name: Post Slack Channel that Build Success
+        if: success()
+        id: slack-build-success
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          channel-id: ${{ env.PROGRESS_SLACK_CHANNEL }}
+          payload: |
+            {
+              "text": ":white_check_mark: *Gyeongdan Spring ${{ github.ref_name }}* 배포가 성공했습니다.",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":pedro: *Gyeongdan Spring ${{ github.ref_name }}* 배포가 성공했습니다."
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "emoji": true,
+                        "text": "깃허브액션에서 확인하기."
+                      },
+                      "style": "primary",
+                      "value": "click_me_123",
+                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.PROGRESS_SLACK_CHANNEL_TOKEN }}
+
+      - name: Post Slack Channel that Build Fail
+        if: failure()
+        id: slack-build-fail
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          channel-id: ${{ env.PROGRESS_SLACK_CHANNEL }}
+          payload: |
+            {
+              "text": ":x: *Gyeongdan Spring ${{ github.ref_name }}* 배포가 실패했습니다.",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":typingcat: *Gyeongdan Spring ${{ github.ref_name }}* 배포가 실패했습니다."
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "emoji": true,
+                        "text": "깃허브액션에서 확인하기."
+                      },
+                      "style": "danger",
+                      "value": "click_me_123",
+                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.PROGRESS_SLACK_CHANNEL_TOKEN }}
