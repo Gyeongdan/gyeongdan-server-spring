@@ -4,12 +4,14 @@ FROM amazoncorretto:17
 ARG SPRING_DATASOURCE_URL
 ARG SPRING_DATASOURCE_USERNAME
 ARG SPRING_DATASOURCE_PASSWORD
+ARG JWT_SECRET_KEY
 
 # 환경 변수 설정
 ENV SPRING_DATASOURCE_URL=$SPRING_DATASOURCE_URL
 ENV SPRING_DATASOURCE_USERNAME=$SPRING_DATASOURCE_USERNAME
 ENV SPRING_DATASOURCE_PASSWORD=$SPRING_DATASOURCE_PASSWORD
+ENV JWT_SECRET_KEY=$JWT_SECRET_KEY
 
 COPY build/libs/*.jar app.jar
 
-ENTRYPOINT ["java", "-Duser.timezone=Asia/Seoul", "-Dspring.datasource.url=${SPRING_DATASOURCE_URL}", "-Dspring.datasource.username=${SPRING_DATASOURCE_USERNAME}", "-Dspring.datasource.password=${SPRING_DATASOURCE_PASSWORD}", "-Dspring.jpa.properties.hibernate.default_schema=${SPRING_DATASOURCE_SCHEMA}", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-Duser.timezone=Asia/Seoul", "-Dspring.datasource.url=${SPRING_DATASOURCE_URL}", "-Dspring.datasource.username=${SPRING_DATASOURCE_USERNAME}", "-Dspring.datasource.password=${SPRING_DATASOURCE_PASSWORD}", "-Dspring.jpa.properties.hibernate.default_schema=${SPRING_DATASOURCE_SCHEMA}","-Djwt.secret.key=${JWT_SECRET_KEY}","-jar", "/app.jar"]

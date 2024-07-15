@@ -26,3 +26,6 @@ logging:
     org:
       springframework:
         web: DEBUG
+
+jwt:
+  secret_key: ${JWT_SECRET_KEY}
