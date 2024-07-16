@@ -13,14 +13,19 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
 
-    public Article getValidArticle(Long id) {
+    public Article getValidArticleById(Long id) { // 일반 사용자
         Article article = articleRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("해당 ID의 게시글이 존재하지 않습니다."));
-        if (article.getIsValid()) {
+        if (Boolean.TRUE.equals(article.getIsValid())) {
             return article;
         } else {
-            throw new IllegalArgumentException("해당 게시글은 유효하지 않습니다.");
+            throw new IllegalArgumentException("접근 권한이 없는 게시글입니다.");
         }
+    }
+
+    public Article getArticleById(Long id) { // 관리자
+        return articleRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("해당 ID의 게시글이 존재하지 않습니다."));
     }
 
     public List<Article> getArticles() {
@@ -45,7 +50,7 @@ public class ArticleService {
 
     public List<Article> getValidArticles() {
         return articleRepository.findAll().stream()
-            .filter(Article::getIsValid)
+            .filter(article -> article != null && article.isValid())
             .toList();
     }
 }
