@@ -1,9 +1,15 @@
 package gyeongdan.article.service;
 
 import gyeongdan.article.domain.Article;
+import gyeongdan.article.domain.ArticleViewHistory;
 import gyeongdan.article.dto.ArticleUpdateRequest;
 import gyeongdan.article.repository.ArticleRepository;
+
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import gyeongdan.article.repository.ArticleViewHistoryJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
+    private final ArticleViewHistoryJpaRepository articleViewHistoryJpaRepository;
 
     public Article getValidArticleById(Long id) { // 일반 사용자
         Article article = articleRepository.findById(id)
@@ -54,9 +61,24 @@ public class ArticleService {
             .toList();
     }
 
-    // 조회수 증가 메서드 추가 시작
+    // 조회수 증가 메서드 추가
     public void incrementViewCount(Article article) {
         article.setViewCount(article.getViewCount() + 1);
         articleRepository.save(article);
+
+        // 조회 기록 저장 추가
+        ArticleViewHistory viewHistory = new ArticleViewHistory(article);
+
+        articleViewHistoryJpaRepository.save(viewHistory);
+    }
+
+    // 최근 조회한 기사 3개 가져오기 메서드 추가
+    public List<Article> getRecentViewedArticles() {
+        List<ArticleViewHistory> recentViewedHistories = articleViewHistoryJpaRepository.findTop100ByOrderByViewedAtDesc();
+        return recentViewedHistories.stream()
+                .map(ArticleViewHistory::getArticle)
+                .distinct()
+                .limit(3)
+                .collect(Collectors.toList());
     }
 }

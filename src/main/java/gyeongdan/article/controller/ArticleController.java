@@ -1,6 +1,7 @@
 package gyeongdan.article.controller;
 
 import gyeongdan.article.domain.Article;
+import gyeongdan.article.domain.ArticleViewHistory;
 import gyeongdan.article.service.ArticleService;
 import gyeongdan.util.CommonResponse;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,12 @@ public class ArticleController {
     public ResponseEntity<?> getArticles() {
         List<Article> articles = articleService.getValidArticles();
         return ResponseEntity.ok(new CommonResponse<>(articles, "게시글 조회 성공", true));
+    }
+
+    // 최근 조회한 기사 3개 가져오기
+    @GetMapping("/recent")
+    public ResponseEntity<?> getRecentViewedArticles() {
+        List<Article> recentViewedArticles = articleService.getRecentViewedArticles();
+        return ResponseEntity.ok(new CommonResponse<>(recentViewedArticles, "가장 최근에 조회한 게시글 3개 조회 성공", true));
     }
 }
