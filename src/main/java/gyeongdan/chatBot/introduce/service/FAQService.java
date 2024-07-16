@@ -13,6 +13,10 @@ import java.util.Optional;
 public class FAQService {
     private final FAQRepository faqRepository;
     public void createFAQ(String question, String answer) {
+        if(checkDuplication(question, answer)) {
+            throw new IllegalArgumentException("중복된 질문이 존재합니다.");
+        }
+
         faqRepository.save(FAQ.builder().question(question).answer(answer).build());
     }
 
@@ -33,4 +37,13 @@ public class FAQService {
         faqRepository.deleteById(id);
     }
 
+    public boolean checkDuplication(String question, String answer) {
+        FAQ faq = faqRepository.findByQuestionAndAnswer(question, answer).orElse(null);
+
+        if (faq == null) {
+            return false;
+        }
+
+        return true;
+    }
 }

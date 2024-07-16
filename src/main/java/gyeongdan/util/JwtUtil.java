@@ -10,6 +10,7 @@ import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Optional;
 import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -76,9 +77,20 @@ public class JwtUtil {
         }
     }
 
-    public Long getUserId(String token) {
+    public Optional<Long> getUserId(String token) {
+        if (token == null || token.isEmpty()) {
+            return Optional.empty();
+        }
         Claims claims = Jwts.parser().setSigningKey(generateKey()).build().parseClaimsJws(token).getBody();
-        return (Long) claims.get("id");
+        Object idObj = claims.get("id");
+
+        if (idObj instanceof Integer) {
+            return Optional.of(((Integer) idObj).longValue());
+        } else if (idObj instanceof Long) {
+            return Optional.of((Long) idObj);
+        } else {
+            return Optional.empty();
+        }
     }
 
 
@@ -102,6 +114,10 @@ public class JwtUtil {
             return bearerToken.substring(7);
         }
         return null;
+    }
+
+    public String resolveToken(String token){
+        return token.substring(7);
     }
 
 }
