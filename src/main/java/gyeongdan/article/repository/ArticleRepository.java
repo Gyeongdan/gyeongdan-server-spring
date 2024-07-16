@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface ArticleRepository {
 
 
-    Optional<Article> findById(Long id);
+    Article findById(Long id);
 
 
     List<Article> findAll();
