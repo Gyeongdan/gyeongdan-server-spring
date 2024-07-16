@@ -12,9 +12,11 @@ import org.springframework.stereotype.Repository;
 public class ArticleRepositoryImpl implements ArticleRepository {
 
     private final ArticleJpaRepository articleJpaRepository;
+    private final ArticleViewHistoryJpaRepository articleViewHistoryJpaRepository;
 
-    public Optional<Article> findById(Long id) {
-        return articleJpaRepository.findById(id);
+    public Article findById(Long id) {
+        return articleJpaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 게시글이 존재하지 않습니다."));
     }
 
     public List<Article> findAll() {

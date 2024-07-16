@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Entity
 @Table(name = "article_view_history", schema = "gyeongdan")
@@ -29,7 +30,15 @@ public class ArticleViewHistory {
     @Column(name = "viewed_at", nullable = false)
     private LocalDateTime viewedAt = LocalDateTime.now();
 
+    @Column(name = "user_id")
+    private Long userId;
+
     public ArticleViewHistory(Article article) {
         this.article = article;
+    }
+
+    public ArticleViewHistory(Article article, Long userId) {
+        this.article = article;
+        this.userId = userId;
     }
 }
