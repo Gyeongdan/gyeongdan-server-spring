@@ -1,5 +1,6 @@
 package gyeongdan.article.domain;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,5 +27,13 @@ public class Article {
 
     private String title;
     private String content;
+    @Nullable
     private Boolean isValid;
+
+    public boolean isValid() {
+        if (isValid == null) {
+            return false;
+        }
+        return isValid;
+    }
 }

@@ -34,4 +34,12 @@ public class AdminArticleController {
         Long savedArticleId = articleService.updateArticle(articleUpdateRequest);
         return ResponseEntity.ok(new CommonResponse<>(savedArticleId, "게시글 수정 성공", true));
     }
+
+    @GetMapping("/detail")
+    @AdminAuthenticated
+    public ResponseEntity<?> getArticleAdmin(@RequestBody Long id) {
+        Article article = articleService.getArticleById(id);
+        return ResponseEntity.ok(new CommonResponse<>(article, "게시글 조회 성공", true));
+    }
+
 }
