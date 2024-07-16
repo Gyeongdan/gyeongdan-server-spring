@@ -29,6 +29,7 @@ public class Article {
     private String content;
     @Nullable
     private Boolean isValid;
+    private Long viewCount;
 
     public boolean isValid() {
         if (isValid == null) {

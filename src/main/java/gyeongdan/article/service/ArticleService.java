@@ -53,4 +53,10 @@ public class ArticleService {
             .filter(article -> article != null && article.isValid())
             .toList();
     }
+
+    // 조회수 증가 메서드 추가 시작
+    public void incrementViewCount(Article article) {
+        article.setViewCount(article.getViewCount() + 1);
+        articleRepository.save(article);
+    }
 }
