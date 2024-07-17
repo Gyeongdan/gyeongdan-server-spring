@@ -1,5 +1,7 @@
-package gyeongdan.article.domain;
+package gyeongdan.article.view_history.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import gyeongdan.article.article.domain.Article;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Entity
 @Table(name = "article_view_history", schema = "gyeongdan")
@@ -23,6 +24,7 @@ public class ArticleViewHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "article_id", nullable = false)
     private Article article;

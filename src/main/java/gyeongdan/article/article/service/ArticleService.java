@@ -1,15 +1,21 @@
-package gyeongdan.article.service;
+package gyeongdan.article.article.service;
 
-import gyeongdan.article.domain.Article;
-import gyeongdan.article.domain.ArticleViewHistory;
-import gyeongdan.article.dto.ArticleUpdateRequest;
-import gyeongdan.article.repository.ArticleRepository;
+import gyeongdan.article.article.domain.Article;
+import gyeongdan.article.view_history.domain.ArticleViewHistory;
+import gyeongdan.article.article.dto.ArticleAllResponse;
+import gyeongdan.article.article.dto.ArticleUpdateRequest;
+import gyeongdan.article.article.dto.PopularArticleResponse;
+import gyeongdan.article.article.repository.ArticleJpaRepository;
+import gyeongdan.article.article.repository.ArticleRepository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import gyeongdan.article.repository.ArticleViewHistoryJpaRepository;
+import gyeongdan.article.view_history.repository.ArticleViewHistoryJpaRepository;
+import gyeongdan.user.service.UserManageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +25,7 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final ArticleViewHistoryJpaRepository articleViewHistoryJpaRepository;
+    private final UserManageService userManageService;
 
     public Article getValidArticleById(Long id, Optional<Long> userId) {
         Article article = articleRepository.findById(id);
@@ -59,10 +66,12 @@ public class ArticleService {
     }
 
 
-    public List<Article> getValidArticles() {
-        return articleRepository.findAll().stream()
-                .filter(article -> article != null && article.isValid())
-                .toList();
+    public List<ArticleAllResponse> getValidArticles() {
+        List<Article> articles = articleRepository.findAll();
+        return articles.stream()
+                .filter(Article::isValid)
+                .map(article -> new ArticleAllResponse(article.getId(), article.getTitle(), article.getContent(), article.getViewCount(), article.getCategory(), article.getCreatedAt()))
+                .collect(Collectors.toList());
     }
 
     // 조회수 증가 메서드
@@ -76,19 +85,28 @@ public class ArticleService {
         articleViewHistoryJpaRepository.save(new ArticleViewHistory(article, userId));
     }
 
-
     // 최근 조회한 기사 3개 가져오는 메서드
     public List<Article> getRecentViewedArticles(Long userId) {
-        if (userId == null) {
-            // exception
-            throw new IllegalArgumentException("유저 정보가 없습니다.");
-        }
+        userManageService.checkUserExist(userId);
 
         List<ArticleViewHistory> recentViewedHistories = articleViewHistoryJpaRepository.findTop100ByUserIdOrderByViewedAtDesc(userId);
         return recentViewedHistories.stream()
                 .map(ArticleViewHistory::getArticle)
                 .distinct()
                 .limit(3)
+                .collect(Collectors.toList());
+    }
+
+    // 오늘 가장 인기 있는 기사 5개 가져오는 메서드 (조회수 기준)
+    public List<PopularArticleResponse> getPopularArticles() {
+        LocalDate today = LocalDate.now();
+        LocalDateTime startOfDay = today.atStartOfDay();
+        LocalDateTime endOfDay = today.plusDays(1).atStartOfDay();
+
+        List<Article> articles = articleViewHistoryJpaRepository.findTopArticlesByViewedAtBetween(startOfDay, endOfDay);
+
+        return articles.stream()
+                .map(article -> new PopularArticleResponse(article.getId(), article.getTitle(), article.getViewCount()))
                 .collect(Collectors.toList());
     }
 }

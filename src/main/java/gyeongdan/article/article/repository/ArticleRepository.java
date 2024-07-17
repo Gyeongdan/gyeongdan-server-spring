@@ -1,8 +1,8 @@
-package gyeongdan.article.repository;
+package gyeongdan.article.article.repository;
 
-import gyeongdan.article.domain.Article;
+import gyeongdan.article.article.domain.Article;
 import java.util.List;
-import java.util.Optional;
+
 import org.springframework.stereotype.Repository;
 
 @Repository
