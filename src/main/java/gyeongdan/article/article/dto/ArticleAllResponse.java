@@ -21,5 +21,5 @@ public class ArticleAllResponse {
     private Long viewCount;
     private String category;
     private Optional<String> imageUrl;
-    private Optional<LocalDateTime> publishedAt;
+    private LocalDateTime publishedAt;
 }

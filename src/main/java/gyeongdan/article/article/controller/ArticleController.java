@@ -72,7 +72,7 @@ public class ArticleController {
                 article.getViewCount(),
                 article.getCategory(),
                 Optional.ofNullable(article.getImageUrl()),
-                Optional.ofNullable(article.getPublishedAt())
+                article.getPublishedAt()
             ))
             .collect(Collectors.toList());
 
