@@ -33,7 +33,7 @@ public class ShortFormController {
     }
 
     // 숏폼 html 상세 조회
-    @GetMapping("html")
+    @GetMapping("/html")
     public ResponseEntity<?> getShortFormHtml(@RequestParam Long id) {
         ShortForm shortForm = shortFormService.getShortForm(id);
         return ResponseEntity.ok(new CommonResponse<>(shortForm.getGraph_html(), "숏폼 조회 성공", true));
