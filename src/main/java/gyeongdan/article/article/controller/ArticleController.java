@@ -67,8 +67,8 @@ public class ArticleController {
         List<ArticleAllResponse> finalResponse = recentViewedArticles.stream()
             .map(article -> new ArticleAllResponse(
                 article.getId(),
-                article.getTitle(),
-                article.getContent(),
+                article.getSimpleTitle(),
+                article.getSimpleContent(),
                 article.getViewCount(),
                 article.getCategory(),
                 Optional.ofNullable(article.getImageUrl()),
