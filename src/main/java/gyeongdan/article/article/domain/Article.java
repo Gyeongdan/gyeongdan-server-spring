@@ -4,7 +4,6 @@ import gyeongdan.article.related_documents.domain.ArticleRelatedDocuments;
 import gyeongdan.article.view_history.domain.ArticleViewHistory;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +11,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +27,8 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
-    private String content;
+    private String simpleTitle;
+    private String simpleContent;
     @Nullable
     private Boolean isValid;
     private Long viewCount;

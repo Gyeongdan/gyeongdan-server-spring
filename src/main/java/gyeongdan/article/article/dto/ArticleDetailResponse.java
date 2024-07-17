@@ -23,8 +23,8 @@ public class ArticleDetailResponse {
 
     public ArticleDetailResponse(Article article) {
         this.id = article.getId();
-        this.title = article.getTitle();
-        this.content = article.getContent();
+        this.title = article.getSimpleTitle();
+        this.content = article.getSimpleContent();
         this.viewCount = article.getViewCount();
         this.relatedDocuments = article.getRelatedDocuments();
         this.isValid = article.isValid();

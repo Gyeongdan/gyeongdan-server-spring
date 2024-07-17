@@ -5,7 +5,6 @@ import gyeongdan.article.view_history.domain.ArticleViewHistory;
 import gyeongdan.article.article.dto.ArticleAllResponse;
 import gyeongdan.article.article.dto.ArticleUpdateRequest;
 import gyeongdan.article.article.dto.PopularArticleResponse;
-import gyeongdan.article.article.repository.ArticleJpaRepository;
 import gyeongdan.article.article.repository.ArticleRepository;
 
 import java.time.LocalDate;
@@ -60,8 +59,8 @@ public class ArticleService {
 
     public Long updateArticle(ArticleUpdateRequest articleUpdateRequest) {
         Article article = articleRepository.findById(articleUpdateRequest.getId());
-        article.setTitle(articleUpdateRequest.getTitle());
-        article.setContent(articleUpdateRequest.getContent());
+        article.setSimpleTitle(articleUpdateRequest.getTitle());
+        article.setSimpleContent(articleUpdateRequest.getContent());
         return articleRepository.save(article).getId();
     }
 
@@ -72,8 +71,8 @@ public class ArticleService {
             .filter(Article::isValid)
             .map(article -> new ArticleAllResponse(
                 article.getId(),
-                article.getTitle(),
-                article.getContent(),
+                article.getSimpleTitle(),
+                article.getSimpleContent(),
                 article.getViewCount(),
                 article.getCategory(),
                 Optional.ofNullable(article.getImageUrl()),
@@ -115,7 +114,7 @@ public class ArticleService {
         List<Article> articles = articleViewHistoryJpaRepository.findTopArticlesByViewedAtBetween(startOfDay, endOfDay);
 
         return articles.stream()
-            .map(article -> new PopularArticleResponse(article.getId(), article.getTitle(), article.getViewCount()))
+            .map(article -> new PopularArticleResponse(article.getId(), article.getSimpleTitle(), article.getViewCount()))
             .collect(Collectors.toList());
     }
 }
