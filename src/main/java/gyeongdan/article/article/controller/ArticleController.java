@@ -1,12 +1,11 @@
-package gyeongdan.article.controller;
+package gyeongdan.article.article.controller;
 
-import gyeongdan.article.domain.Article;
-import gyeongdan.article.domain.ArticleRelatedDocuments;
-import gyeongdan.article.dto.ArticleAllResponse;
-import gyeongdan.article.dto.ArticleDetailResponse;
-import gyeongdan.article.dto.PopularArticleResponse;
-import gyeongdan.article.service.ArticleRelatedDocumentsService;
-import gyeongdan.article.service.ArticleService;
+import gyeongdan.article.article.domain.Article;
+import gyeongdan.article.article.dto.ArticleAllResponse;
+import gyeongdan.article.article.dto.ArticleDetailResponse;
+import gyeongdan.article.article.dto.PopularArticleResponse;
+import gyeongdan.article.related_documents.service.ArticleRelatedDocumentsService;
+import gyeongdan.article.article.service.ArticleService;
 import gyeongdan.util.CommonResponse;
 import gyeongdan.util.JwtUtil;
 import jakarta.annotation.Nullable;

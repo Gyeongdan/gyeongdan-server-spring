@@ -1,12 +1,12 @@
-package gyeongdan.article.service;
+package gyeongdan.article.article.service;
 
-import gyeongdan.article.domain.Article;
-import gyeongdan.article.domain.ArticleViewHistory;
-import gyeongdan.article.dto.ArticleAllResponse;
-import gyeongdan.article.dto.ArticleUpdateRequest;
-import gyeongdan.article.dto.PopularArticleResponse;
-import gyeongdan.article.repository.ArticleJpaRepository;
-import gyeongdan.article.repository.ArticleRepository;
+import gyeongdan.article.article.domain.Article;
+import gyeongdan.article.view_history.domain.ArticleViewHistory;
+import gyeongdan.article.article.dto.ArticleAllResponse;
+import gyeongdan.article.article.dto.ArticleUpdateRequest;
+import gyeongdan.article.article.dto.PopularArticleResponse;
+import gyeongdan.article.article.repository.ArticleJpaRepository;
+import gyeongdan.article.article.repository.ArticleRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import gyeongdan.article.repository.ArticleViewHistoryJpaRepository;
+import gyeongdan.article.view_history.repository.ArticleViewHistoryJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

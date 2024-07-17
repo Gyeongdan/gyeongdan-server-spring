@@ -1,6 +1,6 @@
-package gyeongdan.article.repository;
+package gyeongdan.article.related_documents.repository;
 
-import gyeongdan.article.domain.ArticleRelatedDocuments;
+import gyeongdan.article.related_documents.domain.ArticleRelatedDocuments;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,7 +1,7 @@
-package gyeongdan.article.service;
+package gyeongdan.article.related_documents.service;
 
-import gyeongdan.article.domain.ArticleRelatedDocuments;
-import gyeongdan.article.repository.ArticleRelatedDocumentsRepository;
+import gyeongdan.article.related_documents.domain.ArticleRelatedDocuments;
+import gyeongdan.article.related_documents.repository.ArticleRelatedDocumentsRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

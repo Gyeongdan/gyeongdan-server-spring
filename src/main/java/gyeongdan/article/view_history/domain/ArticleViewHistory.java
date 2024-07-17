@@ -1,6 +1,7 @@
-package gyeongdan.article.domain;
+package gyeongdan.article.view_history.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import gyeongdan.article.article.domain.Article;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

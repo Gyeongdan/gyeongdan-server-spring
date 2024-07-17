@@ -1,7 +1,7 @@
-package gyeongdan.article.dto;
+package gyeongdan.article.article.dto;
 
-import gyeongdan.article.domain.Article;
-import gyeongdan.article.domain.ArticleRelatedDocuments;
+import gyeongdan.article.article.domain.Article;
+import gyeongdan.article.related_documents.domain.ArticleRelatedDocuments;
 import lombok.Getter;
 import lombok.Setter;
 

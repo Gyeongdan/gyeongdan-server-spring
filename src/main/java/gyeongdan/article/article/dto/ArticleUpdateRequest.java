@@ -1,4 +1,4 @@
-package gyeongdan.article.dto;
+package gyeongdan.article.article.dto;
 
 import lombok.Data;
 import lombok.Getter;
