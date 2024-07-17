@@ -85,8 +85,13 @@ public class ArticleService {
     }
 
     // 최근 조회한 기사 3개 가져오는 메서드
-    public List<Article> getRecentViewedArticles() {
-        List<ArticleViewHistory> recentViewedHistories = articleViewHistoryJpaRepository.findTop100ByOrderByViewedAtDesc();
+    public List<Article> getRecentViewedArticles(Long userId) {
+        if (userId == null) {
+            // exception
+            throw new IllegalArgumentException("유저 정보가 없습니다.");
+        }
+
+        List<ArticleViewHistory> recentViewedHistories = articleViewHistoryJpaRepository.findTop100ByUserIdOrderByViewedAtDesc(userId);
         return recentViewedHistories.stream()
                 .map(ArticleViewHistory::getArticle)
                 .distinct()
