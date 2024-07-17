@@ -20,7 +20,7 @@ public class JwtUtil {
 
     @Value("${jwt.secret.key}")
     private String jwtSecretKey;
-    private static final long ACCESS_TOKEN_VALIDITY_MINUTES = 15;
+    private static final long ACCESS_TOKEN_VALIDITY_MINUTES = 60;
     private static final long REFRESH_TOKEN_VALIDITY_DAYS = 30;
 
     public TokenResponse generateTokenResponse(Users user) {
