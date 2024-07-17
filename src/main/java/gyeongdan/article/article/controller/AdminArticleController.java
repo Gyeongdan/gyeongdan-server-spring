@@ -1,8 +1,8 @@
-package gyeongdan.article.controller;
+package gyeongdan.article.article.controller;
 
-import gyeongdan.article.domain.Article;
-import gyeongdan.article.dto.ArticleUpdateRequest;
-import gyeongdan.article.service.ArticleService;
+import gyeongdan.article.article.domain.Article;
+import gyeongdan.article.article.dto.ArticleUpdateRequest;
+import gyeongdan.article.article.service.ArticleService;
 import gyeongdan.util.CommonResponse;
 import gyeongdan.util.annotation.AdminAuthenticated;
 import java.util.List;

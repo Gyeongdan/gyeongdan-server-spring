@@ -13,6 +13,11 @@ public class UserManageService {
 
     private final UserManageRepository userManageRepository;
 
+    public void checkUserExist(Long userId) {
+        userManageRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 ID의 사용자가 존재하지 않습니다."));
+    }
+
     @Transactional
     public Users addUser(String name, Long kakaoUserId, String profileImage) {
         Optional<Users> existingUserOptional = userManageRepository.findByKakaoUserId(kakaoUserId);
@@ -47,4 +52,6 @@ public class UserManageService {
             return userManageRepository.save(newUser);
         }
     }
+
+
 }
