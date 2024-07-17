@@ -35,7 +35,6 @@ public class Article {
     private Boolean isValid;
     private Long viewCount;
     private String category;
-    private Timestamp createdAt;
     @Nullable
     private LocalDateTime publishedAt;
     @Nullable
