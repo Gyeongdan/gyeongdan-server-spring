@@ -2,6 +2,7 @@ package gyeongdan.article.article.dto;
 
 import gyeongdan.article.article.domain.Article;
 import gyeongdan.article.related_documents.domain.ArticleRelatedDocuments;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +18,8 @@ public class ArticleDetailResponse {
     private Long viewCount;
     private List<ArticleRelatedDocuments> relatedDocuments;
     private Boolean isValid;
+    private Optional<String> imageUrl;
+    private Optional<String> publishedAt;
 
     public ArticleDetailResponse(Article article) {
         this.id = article.getId();
@@ -25,5 +28,7 @@ public class ArticleDetailResponse {
         this.viewCount = article.getViewCount();
         this.relatedDocuments = article.getRelatedDocuments();
         this.isValid = article.isValid();
+        this.imageUrl = Optional.ofNullable(article.getImageUrl());
+        this.publishedAt = Optional.ofNullable(article.getPublishedAt()).map(Object::toString);
     }
 }
