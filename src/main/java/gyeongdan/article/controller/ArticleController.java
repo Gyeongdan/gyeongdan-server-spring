@@ -36,11 +36,9 @@ public class ArticleController {
         Article article = articleService.getValidArticleById(id, userId);
         // 조회수 증가
         articleService.incrementViewCount(article);
-        // 관련 정보 조회
-        List<ArticleRelatedDocuments> relatedDocuments = articleRelatedDocumentsService.getRelatedDocuments(id);
 
-        // 기사와 관련 문서를 CommonsResponse에 포함시켜 반환
-        ArticleDetailResponse articleDetailResponse = new ArticleDetailResponse(article, relatedDocuments);
+        // 커스터마이징하여 반환
+        ArticleDetailResponse articleDetailResponse = new ArticleDetailResponse(article);
         return ResponseEntity.ok(new CommonResponse<>(articleDetailResponse, "게시글 조회 성공", true));
     }
 
