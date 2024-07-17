@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import gyeongdan.article.view_history.repository.ArticleViewHistoryJpaRepository;
+import gyeongdan.user.service.UserManageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final ArticleViewHistoryJpaRepository articleViewHistoryJpaRepository;
-    private final ArticleJpaRepository articleJpaRepository;
+    private final UserManageService userManageService;
 
     public Article getValidArticleById(Long id, Optional<Long> userId) {
         Article article = articleRepository.findById(id);
@@ -86,10 +87,7 @@ public class ArticleService {
 
     // 최근 조회한 기사 3개 가져오는 메서드
     public List<Article> getRecentViewedArticles(Long userId) {
-        if (userId == null) {
-            // exception
-            throw new IllegalArgumentException("유저 정보가 없습니다.");
-        }
+        userManageService.checkUserExist(userId);
 
         List<ArticleViewHistory> recentViewedHistories = articleViewHistoryJpaRepository.findTop100ByUserIdOrderByViewedAtDesc(userId);
         return recentViewedHistories.stream()

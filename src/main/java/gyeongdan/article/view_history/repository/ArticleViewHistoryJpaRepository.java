@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ArticleViewHistoryJpaRepository extends JpaRepository<ArticleViewHistory, Long> {
-    List<ArticleViewHistory> findTop100ByOrderByViewedAtDesc();
+    List<ArticleViewHistory> findTop100ByUserIdOrderByViewedAtDesc(Long userId);
 
     @Query("SELECT a.article FROM ArticleViewHistory a WHERE a.viewedAt >= :startOfDay AND a.viewedAt < :endOfDay GROUP BY a.article ORDER BY SUM(a.article.viewCount) DESC")
     List<Article> findTopArticlesByViewedAtBetween(@Param("startOfDay") LocalDateTime startOfDay, @Param("endOfDay") LocalDateTime endOfDay);

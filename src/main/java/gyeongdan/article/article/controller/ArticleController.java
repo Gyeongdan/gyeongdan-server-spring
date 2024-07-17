@@ -53,8 +53,16 @@ public class ArticleController {
 
     // 최근 조회한 기사 3개 가져오기
     @GetMapping("/recent")
-    public ResponseEntity<?> getRecentViewedArticles() {
-        List<Article> recentViewedArticles = articleService.getRecentViewedArticles();
+    public ResponseEntity<?> getRecentViewedArticles(@RequestHeader @Nullable String accessToken) {
+        // userId 디코딩
+        Optional<Long> userId = Optional.empty();
+        if (accessToken != null && !accessToken.isEmpty()) {
+            userId = jwtUtil.getUserId(jwtUtil.resolveToken(accessToken));
+        }
+
+
+        // 최근 조회한 기사 3개 가져오기
+        List<Article> recentViewedArticles = articleService.getRecentViewedArticles(userId.orElse(null));
 
         List<ArticleAllResponse> finalResponse = recentViewedArticles.stream()
                 .map(article -> new ArticleAllResponse(article.getId(), article.getTitle(), article.getContent(), article.getViewCount(), article.getCategory(), article.getCreatedAt()))
