@@ -2,7 +2,6 @@ package gyeongdan.article.dto;
 
 import gyeongdan.article.domain.Article;
 import gyeongdan.article.domain.ArticleRelatedDocuments;
-import gyeongdan.article.domain.ArticleViewHistory;
 import lombok.Getter;
 import lombok.Setter;
 

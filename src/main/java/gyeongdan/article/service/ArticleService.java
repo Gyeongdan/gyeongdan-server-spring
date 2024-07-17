@@ -2,6 +2,7 @@ package gyeongdan.article.service;
 
 import gyeongdan.article.domain.Article;
 import gyeongdan.article.domain.ArticleViewHistory;
+import gyeongdan.article.dto.ArticleAllResponse;
 import gyeongdan.article.dto.ArticleUpdateRequest;
 import gyeongdan.article.dto.PopularArticleResponse;
 import gyeongdan.article.repository.ArticleJpaRepository;
@@ -64,10 +65,12 @@ public class ArticleService {
     }
 
 
-    public List<Article> getValidArticles() {
-        return articleRepository.findAll().stream()
-                .filter(article -> article != null && article.isValid())
-                .toList();
+    public List<ArticleAllResponse> getValidArticles() {
+        List<Article> articles = articleRepository.findAll();
+        return articles.stream()
+                .filter(Article::isValid)
+                .map(article -> new ArticleAllResponse(article.getId(), article.getTitle(), article.getContent(), article.getViewCount(), article.getCategory(), article.getCreatedAt()))
+                .collect(Collectors.toList());
     }
 
     // 조회수 증가 메서드

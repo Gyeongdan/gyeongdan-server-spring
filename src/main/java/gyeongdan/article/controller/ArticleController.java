@@ -2,6 +2,7 @@ package gyeongdan.article.controller;
 
 import gyeongdan.article.domain.Article;
 import gyeongdan.article.domain.ArticleRelatedDocuments;
+import gyeongdan.article.dto.ArticleAllResponse;
 import gyeongdan.article.dto.ArticleDetailResponse;
 import gyeongdan.article.dto.PopularArticleResponse;
 import gyeongdan.article.service.ArticleRelatedDocumentsService;
@@ -46,7 +47,7 @@ public class ArticleController {
     // 게시물 모두 조회
     @GetMapping("")
     public ResponseEntity<?> getArticles() {
-        List<Article> articles = articleService.getValidArticles();
+        List<ArticleAllResponse> articles = articleService.getValidArticles();
         return ResponseEntity.ok(new CommonResponse<>(articles, "게시글 조회 성공", true));
     }
 
