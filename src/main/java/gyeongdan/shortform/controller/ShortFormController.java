@@ -1,6 +1,7 @@
 package gyeongdan.shortform.controller;
 
 import gyeongdan.shortform.domain.ShortForm;
+import gyeongdan.shortform.dto.ShortFormDetailResponse;
 import gyeongdan.shortform.service.ShortFormService;
 import gyeongdan.util.CommonResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,13 @@ public class ShortFormController {
     @GetMapping("/detail")
     public ResponseEntity<?> getShortForm(@RequestParam Long id) {
         ShortForm shortForm = shortFormService.getShortForm(id);
-        return ResponseEntity.ok(new CommonResponse<>(shortForm, "숏폼 조회 성공", true));
+        return ResponseEntity.ok(new CommonResponse<>(new ShortFormDetailResponse(shortForm), "숏폼 조회 성공", true));
+    }
+
+    // 숏폼 html 상세 조회
+    @GetMapping("html")
+    public ResponseEntity<?> getShortFormHtml(@RequestParam Long id) {
+        ShortForm shortForm = shortFormService.getShortForm(id);
+        return ResponseEntity.ok(new CommonResponse<>(shortForm.getGraph_html(), "숏폼 조회 성공", true));
     }
 }
