@@ -42,8 +42,15 @@ public class ArticleController {
 
     // 최근 조회한 기사 3개 가져오기
     @GetMapping("/recent")
-    public ResponseEntity<?> getRecentViewedArticles() {
-        List<Article> recentViewedArticles = articleService.getRecentViewedArticles();
+    public ResponseEntity<?> getRecentViewedArticles(@RequestHeader @Nullable String accessToken) {
+        Optional<Long> userId = Optional.empty();
+        if (accessToken != null && !accessToken.isEmpty()) {
+            userId = jwtUtil.getUserId(jwtUtil.resolveToken(accessToken));
+        }
+        System.out.println("응애 : " + userId);
+
+        List<Article> recentViewedArticles = articleService.getRecentViewedArticles(userId.orElse(null));
+
         return ResponseEntity.ok(new CommonResponse<>(recentViewedArticles, "가장 최근에 조회한 게시글 3개 조회 성공", true));
     }
 }

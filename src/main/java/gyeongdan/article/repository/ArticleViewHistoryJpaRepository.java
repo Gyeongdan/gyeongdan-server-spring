@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ArticleViewHistoryJpaRepository extends JpaRepository<ArticleViewHistory, Long> {
-    List<ArticleViewHistory> findTop100ByOrderByViewedAtDesc();
+    List<ArticleViewHistory> findTop100ByUserIdOrderByViewedAtDesc(Long userId);
 }
