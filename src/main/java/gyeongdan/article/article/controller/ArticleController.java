@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/article")
@@ -54,7 +55,12 @@ public class ArticleController {
     @GetMapping("/recent")
     public ResponseEntity<?> getRecentViewedArticles() {
         List<Article> recentViewedArticles = articleService.getRecentViewedArticles();
-        return ResponseEntity.ok(new CommonResponse<>(recentViewedArticles, "가장 최근에 조회한 게시글 3개 조회 성공", true));
+
+        List<ArticleAllResponse> finalResponse = recentViewedArticles.stream()
+                .map(article -> new ArticleAllResponse(article.getId(), article.getTitle(), article.getContent(), article.getViewCount(), article.getCategory(), article.getCreatedAt()))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(new CommonResponse<>(finalResponse, "가장 최근에 조회한 게시글 3개 조회 성공", true));
     }
 
     // 오늘 가장 인기 있는 기사 5개 조회 (조회수 기준)
