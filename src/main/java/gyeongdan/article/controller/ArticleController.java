@@ -1,6 +1,9 @@
 package gyeongdan.article.controller;
 
 import gyeongdan.article.domain.Article;
+import gyeongdan.article.domain.ArticleRelatedDocuments;
+import gyeongdan.article.dto.ArticleDetailResponse;
+import gyeongdan.article.service.ArticleRelatedDocumentsService;
 import gyeongdan.article.service.ArticleService;
 import gyeongdan.util.CommonResponse;
 import gyeongdan.util.JwtUtil;
@@ -19,6 +22,7 @@ public class ArticleController {
 
     private final ArticleService articleService;
     private final JwtUtil jwtUtil;
+    private final ArticleRelatedDocumentsService articleRelatedDocumentsService;
 
     // 게시글 상세 조회
     // 단, 유저가 보면 조회기록 저장하고, 유저가 아닌 경우 조회수만 증가시키기.
@@ -28,10 +32,16 @@ public class ArticleController {
         if (accessToken != null && !accessToken.isEmpty()) {
             userId = jwtUtil.getUserId(jwtUtil.resolveToken(accessToken));
         }
+        // 기사 조회
         Article article = articleService.getValidArticleById(id, userId);
+        // 조회수 증가
         articleService.incrementViewCount(article);
+        // 관련 정보 조회
+        List<ArticleRelatedDocuments> relatedDocuments = articleRelatedDocumentsService.getRelatedDocuments(id);
 
-        return ResponseEntity.ok(new CommonResponse<>(article, "게시글 조회 성공", true));
+        // 기사와 관련 문서를 CommonsResponse에 포함시켜 반환
+        ArticleDetailResponse articleDetailResponse = new ArticleDetailResponse(article, relatedDocuments);
+        return ResponseEntity.ok(new CommonResponse<>(articleDetailResponse, "게시글 조회 성공", true));
     }
 
     @GetMapping("")

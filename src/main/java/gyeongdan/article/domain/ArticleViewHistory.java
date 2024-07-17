@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Entity
 @Table(name = "article_view_history", schema = "gyeongdan")
