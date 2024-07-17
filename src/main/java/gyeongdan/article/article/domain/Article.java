@@ -4,6 +4,8 @@ import gyeongdan.article.related_documents.domain.ArticleRelatedDocuments;
 import gyeongdan.article.view_history.domain.ArticleViewHistory;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,6 +36,10 @@ public class Article {
     private Long viewCount;
     private String category;
     private Timestamp createdAt;
+    @Nullable
+    private LocalDateTime publishedAt;
+    @Nullable
+    private String imageUrl;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<ArticleViewHistory> viewHistories = new ArrayList<>();
@@ -54,6 +60,7 @@ public class Article {
         this.viewHistories.add(viewHistory);
         viewHistory.setArticle(this);
     }
+
     public void removeViewHistory(ArticleViewHistory viewHistory) {
         viewHistories.remove(viewHistory);
         viewHistory.setArticle(null);
@@ -64,6 +71,7 @@ public class Article {
         this.relatedDocuments.add(relatedDocument);
         relatedDocument.setArticle(this);
     }
+
     public void removeRelatedDocument(ArticleRelatedDocuments relatedDocument) {
         relatedDocuments.remove(relatedDocument);
         relatedDocument.setArticle(null);
