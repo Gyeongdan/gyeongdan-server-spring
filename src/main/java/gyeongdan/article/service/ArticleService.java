@@ -3,8 +3,12 @@ package gyeongdan.article.service;
 import gyeongdan.article.domain.Article;
 import gyeongdan.article.domain.ArticleViewHistory;
 import gyeongdan.article.dto.ArticleUpdateRequest;
+import gyeongdan.article.dto.PopularArticleResponse;
+import gyeongdan.article.repository.ArticleJpaRepository;
 import gyeongdan.article.repository.ArticleRepository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,6 +23,7 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final ArticleViewHistoryJpaRepository articleViewHistoryJpaRepository;
+    private final ArticleJpaRepository articleJpaRepository;
 
     public Article getValidArticleById(Long id, Optional<Long> userId) {
         Article article = articleRepository.findById(id);
@@ -76,7 +81,6 @@ public class ArticleService {
         articleViewHistoryJpaRepository.save(new ArticleViewHistory(article, userId));
     }
 
-
     // 최근 조회한 기사 3개 가져오는 메서드
     public List<Article> getRecentViewedArticles() {
         List<ArticleViewHistory> recentViewedHistories = articleViewHistoryJpaRepository.findTop100ByOrderByViewedAtDesc();
@@ -84,6 +88,19 @@ public class ArticleService {
                 .map(ArticleViewHistory::getArticle)
                 .distinct()
                 .limit(3)
+                .collect(Collectors.toList());
+    }
+
+    // 오늘 가장 인기 있는 기사 5개 가져오는 메서드 (조회수 기준)
+    public List<PopularArticleResponse> getPopularArticles() {
+        LocalDate today = LocalDate.now();
+        LocalDateTime startOfDay = today.atStartOfDay();
+        LocalDateTime endOfDay = today.plusDays(1).atStartOfDay();
+
+        List<Article> articles = articleViewHistoryJpaRepository.findTopArticlesByViewedAtBetween(startOfDay, endOfDay);
+
+        return articles.stream()
+                .map(article -> new PopularArticleResponse(article.getId(), article.getTitle(), article.getViewCount()))
                 .collect(Collectors.toList());
     }
 }

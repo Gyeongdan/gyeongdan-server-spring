@@ -3,6 +3,7 @@ package gyeongdan.article.controller;
 import gyeongdan.article.domain.Article;
 import gyeongdan.article.domain.ArticleRelatedDocuments;
 import gyeongdan.article.dto.ArticleDetailResponse;
+import gyeongdan.article.dto.PopularArticleResponse;
 import gyeongdan.article.service.ArticleRelatedDocumentsService;
 import gyeongdan.article.service.ArticleService;
 import gyeongdan.util.CommonResponse;
@@ -42,6 +43,7 @@ public class ArticleController {
         return ResponseEntity.ok(new CommonResponse<>(articleDetailResponse, "게시글 조회 성공", true));
     }
 
+    // 게시물 모두 조회
     @GetMapping("")
     public ResponseEntity<?> getArticles() {
         List<Article> articles = articleService.getValidArticles();
@@ -53,5 +55,13 @@ public class ArticleController {
     public ResponseEntity<?> getRecentViewedArticles() {
         List<Article> recentViewedArticles = articleService.getRecentViewedArticles();
         return ResponseEntity.ok(new CommonResponse<>(recentViewedArticles, "가장 최근에 조회한 게시글 3개 조회 성공", true));
+    }
+
+    // 오늘 가장 인기 있는 기사 5개 조회 (조회수 기준)
+    @GetMapping("/popular")
+    public ResponseEntity<?> getPopularArticles() {
+        List<PopularArticleResponse> popularArticles = articleService.getPopularArticles();
+
+        return ResponseEntity.ok(new CommonResponse<>(popularArticles, "오늘 가장 인기 있는 게시글 5개 조회 성공", true));
     }
 }
