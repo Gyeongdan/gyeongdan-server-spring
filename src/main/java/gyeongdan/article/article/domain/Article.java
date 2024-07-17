@@ -33,8 +33,10 @@ public class Article {
     private Boolean isValid;
     private Long viewCount;
     private String category;
+    private LocalDateTime createdAt;
     @Nullable
     private LocalDateTime publishedAt;
+
     @Nullable
     private String imageUrl;
 
@@ -43,6 +45,10 @@ public class Article {
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ArticleRelatedDocuments> relatedDocuments;
+
+    public LocalDateTime getPublishedAt() {
+        return publishedAt != null ? publishedAt : createdAt;
+    }
 
     // 활용 메서드들
     public boolean isValid() {
