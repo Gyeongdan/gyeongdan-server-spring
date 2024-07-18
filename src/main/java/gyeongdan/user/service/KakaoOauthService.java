@@ -94,7 +94,7 @@ public class KakaoOauthService {
             .body(KakaoProfile.class);
     }
 
-    public TokenResponse processKakaoLogin(String code) {
+    public TokenResponse processKakaoLoginAndGenerateAccessToken(String code) {
         // 1. 카카오에서 액세스 토큰 획득
         KakaoLoginResponseDTO tokenResponse = getKakaoAccessToken(code);
         String accessToken = tokenResponse.getAccessToken();
