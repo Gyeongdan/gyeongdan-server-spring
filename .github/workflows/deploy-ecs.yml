@@ -12,7 +12,7 @@ env:
   AWS_REGION: ap-northeast-2                      # AWS region 설정
   ECR_REPOSITORY: gyeongdan-spring               # Amazon ECR repository 이름
   ECS_SERVICE: GyeongdanSpring                   # Amazon ECS 서비스 이름
-  ECS_CLUSTER: Gyeongdan-v2                          # Amazon ECS 클러스터 이름
+  ECS_CLUSTER: Gyeongdan                          # Amazon ECS 클러스터 이름
   ECS_TASK_DEFINITION: tf-staging.json  # Amazon ECS task definition 파일 경로
   CONTAINER_NAME: Spring                         # 컨테이너 이름
   PROGRESS_SLACK_CHANNEL: C07BRCDNBMF             # Slack 채널 ID
