@@ -1,5 +1,6 @@
 package gyeongdan.article.article.domain;
 
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import gyeongdan.article.related_documents.domain.ArticleRelatedDocuments;
 import gyeongdan.article.view_history.domain.ArticleViewHistory;
 import jakarta.annotation.Nullable;
@@ -10,9 +11,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "articles", schema = "gyeongdan")
@@ -26,17 +28,24 @@ public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private String title;
+    private String comment;
     private String simpleTitle;
+    private String publisher;
     private String simpleContent;
-    @Nullable
-    private Boolean isValid;
-    private Long viewCount;
-    private String category;
     private LocalDateTime createdAt;
     @Nullable
     private LocalDateTime publishedAt;
+    private String url;
 
+    @Type(JsonBinaryType.class)
+    @Column(columnDefinition = "jsonb")
+    private Map<String, Object> phrase;
+
+    private String category;
+    @Nullable
+    private Boolean isValid;
+    private Long viewCount;
     @Nullable
     private String imageUrl;
 
@@ -79,5 +88,4 @@ public class Article {
         relatedDocuments.remove(relatedDocument);
         relatedDocument.setArticle(null);
     }
-
 }
