@@ -23,7 +23,7 @@ permissions:
 jobs:
   deploy:
     name: Deploy
-    runs-on: ubuntu
+    runs-on: ubuntu-latest
 
     steps:
       - name: Post Slack Channel that Build Start
