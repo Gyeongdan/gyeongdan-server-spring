@@ -22,6 +22,5 @@ public class ShortForm {
     private Long id;
     private String title;
     private String content;
-    private String graph_html;
     private Timestamp createdAt;
 }
