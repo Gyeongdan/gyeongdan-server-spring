@@ -5,6 +5,7 @@ import gyeongdan.util.CommonResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,7 +39,16 @@ public class KakaoOauthController {
         return ResponseEntity
             .ok()
             .body(new CommonResponse<>(
-                kakaoOauthService.processKakaoLogin(code), "카카오 로그인 성공", true
+                kakaoOauthService.processKakaoLoginAndGenerateAccessToken(code), "카카오 로그인 성공", true
+            ));
+    }
+
+    @PostMapping("/login/ok")
+    public ResponseEntity<?> loginOk(@RequestParam String code) {
+        return ResponseEntity
+            .ok()
+            .body(new CommonResponse<>(
+                kakaoOauthService.processKakaoLoginAndGenerateAccessToken(code), "카카오 로그인 성공", true
             ));
     }
 }
