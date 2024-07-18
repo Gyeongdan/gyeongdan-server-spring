@@ -27,7 +27,7 @@ public class ShortFormService {
 
     // 가장 최근 숏폼 3개 가져오기
     public List<ShortFormDetailResponse> getRecentShortForms() {
-        List<ShortForm> shortForms = shortFormRepository.findTop3ByOrderByCreatedAtDesc();
+        List<ShortForm> shortForms = shortFormRepository.findTop3AfterLatest();
 
         return shortForms.stream()
                 .map(ShortFormDetailResponse::new)
