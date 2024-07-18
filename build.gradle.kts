@@ -57,6 +57,9 @@ dependencies {
     // Security
     implementation("org.springframework.boot:spring-boot-starter-security")
 
+    // Hibernate Types
+    implementation("com.vladmihalcea:hibernate-types-60:2.21.0")
+
     // Testing
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")

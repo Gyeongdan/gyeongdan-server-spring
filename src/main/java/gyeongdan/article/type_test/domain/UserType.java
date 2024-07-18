@@ -1,4 +1,4 @@
-package gyeongdan.article.recommend.domain;
+package gyeongdan.article.type_test.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,6 @@
-package gyeongdan.article.recommend.repository;
+package gyeongdan.article.type_test.repository;
 
-import gyeongdan.article.recommend.domain.UserType;
+import gyeongdan.article.type_test.domain.UserType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
