@@ -42,7 +42,8 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorize ->
                 authorize
-                    .anyRequest().permitAll() // 모든 요청 허용
+                    .requestMatchers("/health").permitAll()
+                    .anyRequest().authenticated() // 다른 모든 요청은 인증 필요
             );
 
         return httpSecurity.build();
