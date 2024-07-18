@@ -32,10 +32,11 @@ public class ShortFormController {
         return ResponseEntity.ok(new CommonResponse<>(new ShortFormDetailResponse(shortForm), "숏폼 조회 성공", true));
     }
 
-    // 숏폼 html 상세 조회
-    @GetMapping("/html")
-    public ResponseEntity<?> getShortFormHtml(@RequestParam Long id) {
-        ShortForm shortForm = shortFormService.getShortForm(id);
-        return ResponseEntity.ok(new CommonResponse<>(shortForm.getGraph_html(), "숏폼 조회 성공", true));
+
+    // 가장 최근 숏폼 3개 가져오기
+    @GetMapping("/recent")
+    public ResponseEntity<?> getRecentShortForms() {
+        List<ShortFormDetailResponse> shortForms = shortFormService.getRecentShortForms();
+        return ResponseEntity.ok(new CommonResponse<>(shortForms, "숏폼 조회 성공", true));
     }
 }
