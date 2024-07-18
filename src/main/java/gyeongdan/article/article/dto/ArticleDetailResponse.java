@@ -2,11 +2,12 @@ package gyeongdan.article.article.dto;
 
 import gyeongdan.article.article.domain.Article;
 import gyeongdan.article.related_documents.domain.ArticleRelatedDocuments;
-import java.util.Optional;
+
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Setter
 @Getter
@@ -14,21 +15,36 @@ public class ArticleDetailResponse {
 
     private Long id;
     private String title;
-    private String content;
-    private Long viewCount;
-    private List<ArticleRelatedDocuments> relatedDocuments;
+    private String comment;
+    private String simpleTitle;
+    private String publisher;
+    private String simpleContent;
+    private LocalDateTime createdAt;
+    private LocalDateTime publishedAt;
+    private String url;
+    private Map<String, Object> phrase;
+    private String category;
     private Boolean isValid;
-    private Optional<String> imageUrl;
-    private Optional<String> publishedAt;
+    private Long viewCount;
+    private String imageUrl;
+
+    private List<ArticleRelatedDocuments> relatedDocuments;
 
     public ArticleDetailResponse(Article article) {
         this.id = article.getId();
-        this.title = article.getSimpleTitle();
-        this.content = article.getSimpleContent();
+        this.title = article.getTitle();
+        this.comment = article.getComment();
+        this.simpleTitle = article.getSimpleTitle();
+        this.publisher = article.getPublisher();
+        this.simpleContent = article.getSimpleContent();
+        this.createdAt = article.getCreatedAt();
+        this.publishedAt = article.getPublishedAt();
+        this.url = article.getUrl();
+        this.phrase = article.getPhrase();
+        this.category = article.getCategory();
+        this.isValid = article.getIsValid();
         this.viewCount = article.getViewCount();
+        this.imageUrl = article.getImageUrl();
         this.relatedDocuments = article.getRelatedDocuments();
-        this.isValid = article.isValid();
-        this.imageUrl = Optional.ofNullable(article.getImageUrl());
-        this.publishedAt = Optional.ofNullable(article.getPublishedAt()).map(Object::toString);
     }
 }

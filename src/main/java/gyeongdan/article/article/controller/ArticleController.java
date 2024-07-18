@@ -24,7 +24,6 @@ public class ArticleController {
 
     private final ArticleService articleService;
     private final JwtUtil jwtUtil;
-    private final ArticleRelatedDocumentsService articleRelatedDocumentsService;
 
     // 게시글 상세 조회
     // 단, 유저가 보면 조회기록 저장하고, 유저가 아닌 경우 조회수만 증가시키기.
