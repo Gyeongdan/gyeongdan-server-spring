@@ -21,12 +21,12 @@ public class RecommendService {
 
     public List<ArticleAllResponse> recommendArticleById(Optional<Long> userId) {
         if (userId.isEmpty()) {
-            throw new IllegalArgumentException("Invalid user ID");
+            throw new IllegalArgumentException( "아직 유형검사를 하지 않은 유저입니다.");
         }
 
         // (1) 사용자 id에 해당하는 UserType을 가져옴
         UserType userType = userTypeJpaRepository.findByuserId(userId.get())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
+                .orElseThrow(() -> new IllegalArgumentException( "아직 유형검사를 하지 않은 유저입니다."));
 
         // (2) UserType에서 가장 값이 높은 3개의 타입값을 추출하기
         Map<String, Long> userTypeValues = new HashMap<>();
@@ -82,8 +82,7 @@ public class RecommendService {
             }
         }
 
-        // 기본값 또는 예외 처리
-        throw new IllegalArgumentException("No matching classification ID for given user types");
+        throw new IllegalArgumentException("User type 3개를 기반으로 classification_id를 결정할 수 없습니다!");
     }
 
     // (4) ArticleAllResponse 리스트를 반환하는 메서드
