@@ -1,5 +1,7 @@
 package gyeongdan.article.article.dto;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,5 +20,6 @@ public class ArticleAllResponse {
     private String content;
     private Long viewCount;
     private String category;
-    private Timestamp createdAt;
+    private Optional<String> imageUrl;
+    private LocalDateTime publishedAt;
 }
