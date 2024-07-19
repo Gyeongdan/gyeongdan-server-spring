@@ -33,7 +33,7 @@ public class ArticleDetailResponse {
         this.id = article.getId();
         this.comment = article.getComment();
         this.title = article.getSimpleTitle();
-        this.publisher = article.getPublisher();
+        this.publisher = article.getPublisher().getName();
         this.content = article.getSimpleContent();
         this.createdAt = article.getCreatedAt();
         this.publishedAt = article.getPublishedAt();
