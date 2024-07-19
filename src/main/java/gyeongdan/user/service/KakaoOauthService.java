@@ -114,18 +114,6 @@ public class KakaoOauthService {
     }
 
     public void validateToken(String accessToken) {
-        String uri = "https://kapi.kakao.com/v1/user/access_token_info";
-        restClient
-            .build()
-            .get()
-            .uri(uri)
-            .header("Authorization", "Bearer " + accessToken)
-            .retrieve()
-            .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
-                    throw new UserException(ErrorCode.LOGIN_TOKEN_INVALID);
-                }
-            )
-            .body(KakaoTokenInfo.class);
     }
 }
 
