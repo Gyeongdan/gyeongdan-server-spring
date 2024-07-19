@@ -25,5 +25,5 @@ public class UserType {
     private Long userTypeEntertainer;
     private Long userTypeTechSpecialist;
     private Long userTypeProfessionals;
-    private Long userType;
+    private String userType;
 }

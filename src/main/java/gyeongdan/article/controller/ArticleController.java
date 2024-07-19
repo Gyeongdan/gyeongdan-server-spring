@@ -28,7 +28,7 @@ public class ArticleController {
     // 단, 유저가 보면 조회기록 저장하고, 유저가 아닌 경우 조회수만 증가시키기.
     @GetMapping("/detail")
     public ResponseEntity<?> getArticle(@RequestParam Long id,
-        @RequestHeader @Nullable String accessToken) { // id : 기사id, access token : 유저의 접근 권한
+                                        @RequestHeader @Nullable String accessToken) { // id : 기사id, access token : 유저의 접근 권한
         Optional<Long> userId = Optional.empty();
         if (accessToken != null && !accessToken.isEmpty()) {
             userId = jwtUtil.getUserId(jwtUtil.resolveToken(accessToken));
@@ -63,16 +63,16 @@ public class ArticleController {
         List<Article> recentViewedArticles = articleService.getRecentViewedArticles(userId.orElse(null));
 
         List<ArticleAllResponse> finalResponse = recentViewedArticles.stream()
-            .map(article -> new ArticleAllResponse(
-                article.getId(),
-                article.getSimpleTitle(),
-                article.getSimpleContent(),
-                article.getViewCount(),
-                article.getCategory(),
-                Optional.ofNullable(article.getImageUrl()),
-                article.getPublishedAt()
-            ))
-            .collect(Collectors.toList());
+                .map(article -> new ArticleAllResponse(
+                        article.getId(),
+                        article.getSimpleTitle(),
+                        article.getSimpleContent(),
+                        article.getViewCount(),
+                        article.getCategory(),
+                        Optional.ofNullable(article.getImageUrl()),
+                        article.getPublishedAt()
+                ))
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok(new CommonResponse<>(finalResponse, "가장 최근에 조회한 게시글 3개 조회 성공", true));
     }

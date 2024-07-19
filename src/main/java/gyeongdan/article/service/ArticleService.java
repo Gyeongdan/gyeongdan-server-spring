@@ -5,8 +5,10 @@ import gyeongdan.article.domain.ArticleViewHistory;
 import gyeongdan.article.dto.ArticleAllResponse;
 import gyeongdan.article.dto.ArticleUpdateRequest;
 import gyeongdan.article.dto.PopularArticleResponse;
+import gyeongdan.article.repository.ArticleJpaRepository;
 import gyeongdan.article.repository.ArticleRepository;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,6 +27,7 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final ArticleViewHistoryJpaRepository articleViewHistoryJpaRepository;
     private final UserManageService userManageService;
+    private final ArticleJpaRepository articleJpaRepository;
 
     public Article getValidArticleById(Long id, Optional<Long> userId) {
         Article article = articleRepository.findById(id);
@@ -68,17 +71,17 @@ public class ArticleService {
     public List<ArticleAllResponse> getValidArticles() {
         List<Article> articles = articleRepository.findAll();
         return articles.stream()
-            .filter(Article::isValid)
-            .map(article -> new ArticleAllResponse(
-                article.getId(),
-                article.getSimpleTitle(),
-                article.getSimpleContent(),
-                article.getViewCount(),
-                article.getCategory(),
-                Optional.ofNullable(article.getImageUrl()),
-                article.getPublishedAt()
-            ))
-            .collect(Collectors.toList());
+                .filter(Article::isValid)
+                .map(article -> new ArticleAllResponse(
+                        article.getId(),
+                        article.getSimpleTitle(),
+                        article.getSimpleContent(),
+                        article.getViewCount(),
+                        article.getCategory(),
+                        Optional.ofNullable(article.getImageUrl()),
+                        article.getPublishedAt()
+                ))
+                .collect(Collectors.toList());
     }
 
     // 조회수 증가 메서드
@@ -97,24 +100,26 @@ public class ArticleService {
         userManageService.checkUserExist(userId);
 
         List<ArticleViewHistory> recentViewedHistories = articleViewHistoryJpaRepository.findTop100ByUserIdOrderByViewedAtDesc(
-            userId);
+                userId);
         return recentViewedHistories.stream()
-            .map(ArticleViewHistory::getArticle)
-            .distinct()
-            .limit(3)
-            .collect(Collectors.toList());
+                .map(ArticleViewHistory::getArticle)
+                .distinct()
+                .limit(3)
+                .collect(Collectors.toList());
     }
 
-    // 오늘 가장 인기 있는 기사 5개 가져오는 메서드 (조회수 기준)
+    // 이번 주 가장 인기 있는 기사 5개 가져오는 메서드 (조회수 기준)
     public List<PopularArticleResponse> getPopularArticles() {
         LocalDate today = LocalDate.now();
-        LocalDateTime startOfDay = today.atStartOfDay();
-        LocalDateTime endOfDay = today.plusDays(1).atStartOfDay();
+        LocalDate startOfWeek = today.with(DayOfWeek.MONDAY);
+        LocalDateTime startOfWeekDateTime = startOfWeek.atStartOfDay();
+        LocalDate endOfWeek = today.with(DayOfWeek.SUNDAY).plusDays(1);
+        LocalDateTime endOfWeekDateTime = endOfWeek.atStartOfDay();
 
-        List<Article> articles = articleViewHistoryJpaRepository.findTopArticlesByViewedAtBetween(startOfDay, endOfDay);
+        List<Article> articles = articleJpaRepository.findTopArticlesByPublishedAtBetween(startOfWeekDateTime, endOfWeekDateTime);
 
         return articles.stream()
-            .map(article -> new PopularArticleResponse(article.getId(), article.getSimpleTitle(), article.getViewCount()))
-            .collect(Collectors.toList());
+                .map(article -> new PopularArticleResponse(article.getId(), article.getSimpleTitle(), article.getViewCount()))
+                .collect(Collectors.toList());
     }
 }
