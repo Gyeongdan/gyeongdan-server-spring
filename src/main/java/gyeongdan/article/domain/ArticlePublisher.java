@@ -6,8 +6,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum ArticlePublisher {
-    MAE_KYUNG("매일 경제"),
-    HAN_KYUNG("한국 경제"),
+    MAE_KYUNG("매일경제"),
+    HAN_KYUNG("한국경제"),
     ;
 
     private final String name;
