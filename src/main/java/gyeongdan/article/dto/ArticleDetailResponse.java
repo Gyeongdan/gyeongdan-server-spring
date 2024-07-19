@@ -14,11 +14,10 @@ import lombok.Setter;
 public class ArticleDetailResponse {
 
     private Long id;
-    private String title;
     private String comment;
-    private String simpleTitle;
+    private String title;
     private String publisher;
-    private String simpleContent;
+    private String content;
     private LocalDateTime createdAt;
     private LocalDateTime publishedAt;
     private String url;
@@ -32,11 +31,10 @@ public class ArticleDetailResponse {
 
     public ArticleDetailResponse(Article article) {
         this.id = article.getId();
-        this.title = article.getTitle();
         this.comment = article.getComment();
-        this.simpleTitle = article.getSimpleTitle();
+        this.title = article.getSimpleTitle();
         this.publisher = article.getPublisher();
-        this.simpleContent = article.getSimpleContent();
+        this.content = article.getSimpleContent();
         this.createdAt = article.getCreatedAt();
         this.publishedAt = article.getPublishedAt();
         this.url = article.getUrl();
