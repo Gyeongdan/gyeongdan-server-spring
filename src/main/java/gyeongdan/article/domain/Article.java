@@ -4,14 +4,14 @@ import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -26,24 +26,28 @@ public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String title;
     private String comment;
+
+    @Enumerated(EnumType.STRING)
+    private ArticlePublisher publisher;
+
     private String simpleTitle;
-    private String publisher;
     private String simpleContent;
     private LocalDateTime createdAt;
+
     @Nullable
     private LocalDateTime publishedAt;
-    private String url;
 
     @Type(JsonBinaryType.class)
     @Column(columnDefinition = "jsonb")
     private Map<String, Object> phrase;
 
     private String category;
-    @Nullable
-    private Boolean isValid;
     private Long viewCount;
+    private String url;
+
     @Nullable
     private String imageUrl;
 
@@ -53,11 +57,14 @@ public class Article {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ArticleRelatedDocuments> relatedDocuments;
 
+    @Nullable
+    private Boolean isValid;
+
+    // 활용 메서드들
     public LocalDateTime getPublishedAt() {
         return publishedAt != null ? publishedAt : createdAt;
     }
 
-    // 활용 메서드들
     public boolean isValid() {
         if (isValid == null) {
             return false;
