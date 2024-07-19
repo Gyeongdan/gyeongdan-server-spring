@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-
 @Entity
 @Table(name = "user_type", schema = "gyeongdan")
 @Getter
@@ -28,4 +27,3 @@ public class UserType {
     private Long userTypeProfessionals;
     private Long userType;
 }
-

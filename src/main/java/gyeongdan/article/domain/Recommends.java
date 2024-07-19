@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Recommends {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long classificationId;
@@ -26,9 +27,10 @@ public class Recommends {
     @Transient
     private List<Long> recommendArticleIds;
 
-    // 활용 메서드들
+    // ObjectMapper instance for JSON conversion
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    // Lifecycle methods
     @PostLoad
     private void onLoad() {
         this.recommendArticleIds = convertJsonToList(this.recommendArticleIdsJson);
@@ -40,9 +42,11 @@ public class Recommends {
         this.recommendArticleIdsJson = convertListToJson(this.recommendArticleIds);
     }
 
+    // Utility methods for JSON conversion
     private List<Long> convertJsonToList(String json) {
         try {
-            return objectMapper.readValue(json, new TypeReference<List<Long>>() {});
+            return objectMapper.readValue(json, new TypeReference<List<Long>>() {
+            });
         } catch (IOException e) {
             throw new RuntimeException("Failed to convert JSON to List<Long>", e);
         }
