@@ -3,9 +3,9 @@ package gyeongdan.article.service;
 import gyeongdan.article.dto.ArticleAllResponse;
 import gyeongdan.article.repository.ArticleJpaRepository;
 import gyeongdan.article.domain.Recommends;
-import gyeongdan.article.domain.UserType;
+import gyeongdan.user.domain.UserType;
 import gyeongdan.article.repository.RecommendJpaRepository;
-import gyeongdan.article.repository.UserTypeJpaRepository;
+import gyeongdan.user.repository.UserTypeJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

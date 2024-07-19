@@ -1,4 +1,4 @@
-package gyeongdan.article.domain;
+package gyeongdan.user.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,12 +18,15 @@ public class UserType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long id;
 
+    private Long userId;
     private Long userTypeIssueFinder;
     private Long userTypeLifestyleConsumer;
     private Long userTypeEntertainer;
     private Long userTypeTechSpecialist;
     private Long userTypeProfessionals;
-    private Long userType;
+
+    @Enumerated(EnumType.STRING)
+    private UserTypeEnum userType;
 }
