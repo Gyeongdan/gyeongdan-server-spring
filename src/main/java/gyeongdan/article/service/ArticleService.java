@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 import gyeongdan.article.repository.ArticleViewHistoryJpaRepository;
 import gyeongdan.user.service.UserManageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -110,13 +111,12 @@ public class ArticleService {
 
     // 이번 주 가장 인기 있는 기사 5개 가져오는 메서드 (조회수 기준)
     public List<PopularArticleResponse> getPopularArticles() {
+        // 오늘을 기준으로 이번 주의 시작과 끝을 구함 (월요일부터 일요일까지)
         LocalDate today = LocalDate.now();
-        LocalDate startOfWeek = today.with(DayOfWeek.MONDAY);
-        LocalDateTime startOfWeekDateTime = startOfWeek.atStartOfDay();
-        LocalDate endOfWeek = today.with(DayOfWeek.SUNDAY).plusDays(1);
-        LocalDateTime endOfWeekDateTime = endOfWeek.atStartOfDay();
+        LocalDateTime mondayDateTime = today.with(DayOfWeek.MONDAY).atStartOfDay();
+        LocalDateTime sundayDateTime = today.with(DayOfWeek.SUNDAY).plusDays(1).atStartOfDay();
 
-        List<Article> articles = articleJpaRepository.findTopArticlesByPublishedAtBetween(startOfWeekDateTime, endOfWeekDateTime);
+        List<Article> articles = articleJpaRepository.findTop10ByPublishedAtBetweenOrderByViewCountDesc(mondayDateTime, sundayDateTime);
 
         return articles.stream()
                 .map(article -> new PopularArticleResponse(article.getId(), article.getSimpleTitle(), article.getViewCount()))
