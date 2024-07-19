@@ -1,5 +1,7 @@
 package gyeongdan.user.controller;
 
+import gyeongdan.user.domain.UserType;
+import gyeongdan.user.dto.UserTypeRecord;
 import gyeongdan.user.dto.UserTypeTestResult;
 import gyeongdan.user.service.UserManageService;
 import gyeongdan.util.CommonResponse;
@@ -8,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +24,7 @@ public class UserTypeController {
     private final UserManageService userManageService;
 
 
+
     @LoginAuthenticated
     @PostMapping("/save")
     public ResponseEntity<?> saveUserTypeTestResult(
@@ -32,5 +36,14 @@ public class UserTypeController {
         userManageService.saveUserType(userId, userTypeTestResult);
 
         return ResponseEntity.ok(new CommonResponse<>(null, "유저 타입 테스트 결과 저장 성공", true));
+    }
+
+    @LoginAuthenticated
+    @GetMapping
+    public ResponseEntity<?> getUserType() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = Long.valueOf(authentication.getName());
+        UserTypeRecord userType = userManageService.getUserType(userId);
+        return ResponseEntity.ok(new CommonResponse<>(userType, "유저 타입 테스트 결과 조회 성공", true));
     }
 }

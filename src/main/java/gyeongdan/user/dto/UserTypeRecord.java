@@ -1,12 +1,14 @@
 package gyeongdan.user.dto;
 
 import gyeongdan.user.domain.UserTypeEnum;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
-@Data
 @Getter
-public class UserTypeTestResult {
+@Builder
+@AllArgsConstructor
+public class UserTypeRecord {
 
     private Long userTypeIssueFinder;
     private Long userTypeLifestyleConsumer;
