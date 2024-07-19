@@ -1,7 +1,6 @@
 package gyeongdan.user.service;
 
 import gyeongdan.user.domain.UserType;
-import gyeongdan.user.domain.UserTypeEnum;
 import gyeongdan.user.domain.Users;
 import gyeongdan.user.dto.UserTypeRecord;
 import gyeongdan.user.dto.UserTypeTestResult;
@@ -94,5 +93,10 @@ public class UserManageService {
             userTypes.get(0).getUserTypeProfessionals(),
             userTypes.get(0).getUserType()
         );
+    }
+
+    public Users getUser(Long userId) {
+        return userManageRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 ID의 사용자가 존재하지 않습니다."));
     }
 }
