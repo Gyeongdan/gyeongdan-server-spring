@@ -1,4 +1,4 @@
-package gyeongdan.article.domain;
+package gyeongdan.user.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

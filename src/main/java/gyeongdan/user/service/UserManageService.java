@@ -1,7 +1,10 @@
 package gyeongdan.user.service;
 
+import gyeongdan.user.domain.UserType;
 import gyeongdan.user.domain.Users;
+import gyeongdan.user.dto.UserTypeTestResult;
 import gyeongdan.user.repository.UserManageRepository;
+import gyeongdan.user.repository.UserTypeJpaRepository;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class UserManageService {
 
     private final UserManageRepository userManageRepository;
+    private final UserTypeJpaRepository userTypeJpaRepository;
 
     public void checkUserExist(Long userId) {
         userManageRepository.findById(userId)
@@ -53,5 +57,19 @@ public class UserManageService {
         }
     }
 
+    @Transactional
+    public void saveUserType(Long userId, UserTypeTestResult userTypeTestResult) {
+        checkUserExist(userId);
+        userTypeJpaRepository.save(
+            UserType.builder()
+                .userId(userId)
+                .userTypeIssueFinder(userTypeTestResult.getUserTypeIssueFinder())
+                .userTypeLifestyleConsumer(userTypeTestResult.getUserTypeLifestyleConsumer())
+                .userTypeEntertainer(userTypeTestResult.getUserTypeEntertainer())
+                .userTypeTechSpecialist(userTypeTestResult.getUserTypeTechSpecialist())
+                .userTypeProfessionals(userTypeTestResult.getUserTypeProfessionals())
+                .build()
+        );
+    }
 
 }
