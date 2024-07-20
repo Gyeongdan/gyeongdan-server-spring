@@ -1,5 +1,6 @@
 package gyeongdan.user.controller;
 
+import gyeongdan.user.domain.UserProfile;
 import gyeongdan.user.service.UserManageService;
 import gyeongdan.util.CommonResponse;
 import gyeongdan.util.annotation.LoginAuthenticated;
@@ -18,14 +19,15 @@ public class UserController {
 
     private final UserManageService userManageService;
 
-    @GetMapping("/name")
+    @GetMapping("/profile")
     @LoginAuthenticated
     public ResponseEntity<?> getUserName() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = Long.valueOf(authentication.getName());
+        UserProfile userProfile = userManageService.getProfile(userId);
 
         return ResponseEntity.ok(new CommonResponse<>(
-            userManageService.getUser(userId).getName(), "유저 이름 가져오기 성공", true
+                userProfile, "유저 이름 가져오기 성공", true
         ));
     }
 
