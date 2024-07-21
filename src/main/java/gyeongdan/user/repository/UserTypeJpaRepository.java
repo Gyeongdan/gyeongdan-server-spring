@@ -9,8 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserTypeJpaRepository extends JpaRepository<UserType, Long> {
+    Optional<UserType> findTopByUserIdOrderByIdDesc(Long userId);
 
-    Optional<UserType> findByuserId(Long user_id);
-
-    Optional<List<UserType>> findByUserId(Long userId);
+    Optional<List<UserType>> findAllByUserId(Long userId);
 }
