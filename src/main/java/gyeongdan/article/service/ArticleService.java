@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 import gyeongdan.article.repository.ArticleViewHistoryJpaRepository;
 import gyeongdan.user.service.UserManageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -45,7 +44,7 @@ public class ArticleService {
 
     // 게시물 전체 조회
     public List<ArticleAllResponse> getValidArticles() {
-        List<Article> articles = articleRepository.findAllOrderByPublishedAtOrCreatedAtDesc();
+        List<Article> articles = articleRepository.findAllValidOrderByPublishedAtOrCreatedAtDesc();
         return articles.stream()
                 .filter(Article::isValid)
                 .map(article -> new ArticleAllResponse(

@@ -8,6 +8,7 @@ import gyeongdan.article.service.ArticleService;
 import gyeongdan.util.CommonResponse;
 import gyeongdan.util.JwtUtil;
 import gyeongdan.util.annotation.LoginAuthenticated;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class ArticleController {
     // 단, 유저가 보면 조회기록 저장하고, 유저가 아닌 경우 조회수만 증가시키기
     @GetMapping("/detail")
     public ResponseEntity<?> getArticle(@RequestParam Long id,
-                                        @RequestHeader(name = "Authorization") String accessToken) { // id : 기사id, access token : 유저의 접근 권한
+                                        @RequestHeader(name = "Authorization") @Nullable String accessToken) { // id : 기사id, access token : 유저의 접근 권한
         Optional<Long> userId = Optional.empty();
         if (accessToken != null && !accessToken.isEmpty()) {
             userId = jwtUtil.getUserId(jwtUtil.resolveToken(accessToken));
