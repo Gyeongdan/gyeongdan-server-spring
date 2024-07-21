@@ -8,7 +8,6 @@ import gyeongdan.article.service.ArticleService;
 import gyeongdan.util.CommonResponse;
 import gyeongdan.util.JwtUtil;
 import gyeongdan.util.annotation.LoginAuthenticated;
-import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +52,7 @@ public class ArticleController {
     @GetMapping("")
     public ResponseEntity<?> getArticles() {
         List<ArticleAllResponse> articles = articleService.getValidArticles();
-        return ResponseEntity.ok(new CommonResponse<>(articles, "게시글 조회 성공", true));
+        return ResponseEntity.ok(new CommonResponse<>(articles, "게시글 모두 조회 성공", true));
     }
 
     // 최근 조회한 기사 3개 가져오기

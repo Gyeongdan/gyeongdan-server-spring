@@ -16,4 +16,5 @@ public interface ArticleRepository {
 
     Article save(Article article);
 
+    List<Article> findAllOrderByPublishedAtOrCreatedAtDesc();
 }

@@ -30,6 +30,7 @@ public class ArticleService {
     private final UserManageService userManageService;
     private final ArticleJpaRepository articleJpaRepository;
 
+    // 게시글 상세 조회
     public Article getValidArticleById(Long id, Optional<Long> userId) {
         Article article = articleRepository.findById(id); // id에 해당하는 기사 가져오기
 
@@ -42,6 +43,22 @@ public class ArticleService {
         return article;
     }
 
+    // 게시물 전체 조회
+    public List<ArticleAllResponse> getValidArticles() {
+        List<Article> articles = articleRepository.findAllOrderByPublishedAtOrCreatedAtDesc();
+        return articles.stream()
+                .filter(Article::isValid)
+                .map(article -> new ArticleAllResponse(
+                        article.getId(),
+                        article.getSimpleTitle(),
+                        article.getSimpleContent(),
+                        article.getViewCount(),
+                        article.getCategory(),
+                        Optional.ofNullable(article.getImageUrl()),
+                        article.getPublishedAt()
+                ))
+                .collect(Collectors.toList());
+    }
 
     private static void checkArticleVisible(Article article) {
         if (Boolean.FALSE.equals(article.getIsValid())) {
@@ -71,22 +88,6 @@ public class ArticleService {
         return articleRepository.save(article).getId();
     }
 
-
-    public List<ArticleAllResponse> getValidArticles() {
-        List<Article> articles = articleRepository.findAll();
-        return articles.stream()
-                .filter(Article::isValid)
-                .map(article -> new ArticleAllResponse(
-                        article.getId(),
-                        article.getSimpleTitle(),
-                        article.getSimpleContent(),
-                        article.getViewCount(),
-                        article.getCategory(),
-                        Optional.ofNullable(article.getImageUrl()),
-                        article.getPublishedAt()
-                ))
-                .collect(Collectors.toList());
-    }
 
     // 조회수 증가 메서드
     public void incrementViewCount(Article article) {
