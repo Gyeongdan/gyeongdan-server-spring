@@ -81,7 +81,7 @@ public class UserManageService {
     public UserTypeRecord getUserType(Long userId) {
         checkUserExist(userId);
 
-        List<UserType> userTypes = userTypeJpaRepository.findByUserId(userId)
+        List<UserType> userTypes = userTypeJpaRepository.findAllByUserId(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자의 유저 타입이 존재하지 않습니다."));
 
         if (userTypes.isEmpty()) {

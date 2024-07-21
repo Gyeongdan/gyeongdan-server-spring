@@ -19,14 +19,10 @@ public class RecommendService {
     private final UserTypeJpaRepository userTypeJpaRepository;
     private final ArticleJpaRepository articleJpaRepository;
 
-    public List<ArticleAllResponse> recommendArticleById(Optional<Long> userId) {
-        if (userId.isEmpty()) {
-            throw new IllegalArgumentException( "userId가 유효하지 않습니다.");
-        }
-
+    public List<ArticleAllResponse> recommendArticleById(Long userId) {
         // (1) 사용자 id에 해당하는 UserType을 가져옴
-        UserType userType = userTypeJpaRepository.findByuserId(userId.get())
-                .orElseThrow(() -> new IllegalArgumentException( "아직 유형검사를 하지 않은 유저입니다."));
+        UserType userType = userTypeJpaRepository.findTopByUserIdOrderByIdDesc(userId)
+                .orElseThrow(() -> new IllegalArgumentException("아직 유형검사를 하지 않은 유저입니다."));
 
         // (2) UserType에서 가장 값이 높은 3개의 타입값을 추출하기
         Map<String, Long> userTypeValues = new HashMap<>();

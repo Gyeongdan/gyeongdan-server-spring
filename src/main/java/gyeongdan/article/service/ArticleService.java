@@ -31,10 +31,13 @@ public class ArticleService {
     private final ArticleJpaRepository articleJpaRepository;
 
     public Article getValidArticleById(Long id, Optional<Long> userId) {
-        Article article = articleRepository.findById(id);
-        checkArticleVisible(article); // id에 해당하는 게시글이 있는지 확인. 없으면 예외 발생
+        Article article = articleRepository.findById(id); // id에 해당하는 기사 가져오기
 
-        userId.ifPresent(aLong -> saveViewHistory(aLong, article)); // 만약 userId가 존재하면 조회 기록 저장
+        checkArticleVisible(article); // id에 해당하는 기사가 있는지 확인. 없으면 예외 발생
+
+        if (userId.isPresent()) {
+            saveViewHistory(userId.get(), article); // 조회 기록 저장
+        }
 
         return article;
     }
