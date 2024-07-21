@@ -120,7 +120,7 @@ public class ArticleService {
         LocalDateTime mondayDateTime = today.with(DayOfWeek.MONDAY).atStartOfDay();
         LocalDateTime sundayDateTime = today.with(DayOfWeek.SUNDAY).plusDays(1).atStartOfDay();
 
-        List<Article> articles = articleJpaRepository.findTop10ByPublishedAtBetweenOrderByViewCountDesc(mondayDateTime, sundayDateTime);
+        List<Article> articles = articleJpaRepository.findTop10ByPublishedAtBetweenAndIsValidTrueOrderByViewCountDesc(mondayDateTime, sundayDateTime);
 
         return articles.stream()
                 .map(article -> new PopularArticleResponse(article.getId(), article.getSimpleTitle(), article.getViewCount()))
