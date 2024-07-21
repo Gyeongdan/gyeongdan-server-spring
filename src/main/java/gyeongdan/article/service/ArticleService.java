@@ -113,7 +113,7 @@ public class ArticleService {
                 .collect(Collectors.toList());
     }
 
-    // 금주 가장 인기 있는 기사 5개 가져오는 메서드 (조회수 기준)
+    // 금주 가장 인기 있는 기사 10개 가져오는 메서드 (조회수 기준)
     public List<PopularArticleResponse> getPopularArticles() {
         // 오늘을 기준으로 이번 주의 시작과 끝을 구함 (월요일부터 일요일까지)
         LocalDate today = LocalDate.now();
