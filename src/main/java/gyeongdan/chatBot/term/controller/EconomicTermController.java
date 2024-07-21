@@ -15,7 +15,7 @@ import java.util.Map;
 public class EconomicTermController {
     private final EconomicTermService economicTermService;
 
-    @GetMapping("/search")
+    @PostMapping("/search")
     public ResponseEntity<?> search(@RequestBody String question) throws Exception {
         Map<String, String> data = economicTermService.findEconomicTerm(question);
 

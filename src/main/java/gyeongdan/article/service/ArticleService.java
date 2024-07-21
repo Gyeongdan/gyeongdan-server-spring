@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 import gyeongdan.article.repository.ArticleViewHistoryJpaRepository;
 import gyeongdan.user.service.UserManageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,15 +29,35 @@ public class ArticleService {
     private final UserManageService userManageService;
     private final ArticleJpaRepository articleJpaRepository;
 
+    // 게시글 상세 조회
     public Article getValidArticleById(Long id, Optional<Long> userId) {
-        Article article = articleRepository.findById(id);
-        checkArticleVisible(article); // id에 해당하는 게시글이 있는지 확인. 없으면 예외 발생
+        Article article = articleRepository.findById(id); // id에 해당하는 기사 가져오기
 
-        userId.ifPresent(aLong -> saveViewHistory(aLong, article)); // 만약 userId가 존재하면 조회 기록 저장
+        checkArticleVisible(article); // id에 해당하는 기사가 있는지 확인. 없으면 예외 발생
+
+        if (userId.isPresent()) {
+            saveViewHistory(userId.get(), article); // 조회 기록 저장
+        }
 
         return article;
     }
 
+    // 게시물 전체 조회
+    public List<ArticleAllResponse> getValidArticles() {
+        List<Article> articles = articleRepository.findAllValidOrderByPublishedAtOrCreatedAtDesc();
+        return articles.stream()
+                .filter(Article::isValid)
+                .map(article -> new ArticleAllResponse(
+                        article.getId(),
+                        article.getSimpleTitle(),
+                        article.getSimpleContent(),
+                        article.getViewCount(),
+                        article.getCategory(),
+                        Optional.ofNullable(article.getImageUrl()),
+                        article.getPublishedAt()
+                ))
+                .collect(Collectors.toList());
+    }
 
     private static void checkArticleVisible(Article article) {
         if (Boolean.FALSE.equals(article.getIsValid())) {
@@ -69,22 +88,6 @@ public class ArticleService {
     }
 
 
-    public List<ArticleAllResponse> getValidArticles() {
-        List<Article> articles = articleRepository.findAll();
-        return articles.stream()
-                .filter(Article::isValid)
-                .map(article -> new ArticleAllResponse(
-                        article.getId(),
-                        article.getSimpleTitle(),
-                        article.getSimpleContent(),
-                        article.getViewCount(),
-                        article.getCategory(),
-                        Optional.ofNullable(article.getImageUrl()),
-                        article.getPublishedAt()
-                ))
-                .collect(Collectors.toList());
-    }
-
     // 조회수 증가 메서드
     public void incrementViewCount(Article article) {
         article.setViewCount(article.getViewCount() + 1);
@@ -109,14 +112,14 @@ public class ArticleService {
                 .collect(Collectors.toList());
     }
 
-    // 이번 주 가장 인기 있는 기사 5개 가져오는 메서드 (조회수 기준)
+    // 금주 가장 인기 있는 기사 10개 가져오는 메서드 (조회수 기준)
     public List<PopularArticleResponse> getPopularArticles() {
         // 오늘을 기준으로 이번 주의 시작과 끝을 구함 (월요일부터 일요일까지)
         LocalDate today = LocalDate.now();
         LocalDateTime mondayDateTime = today.with(DayOfWeek.MONDAY).atStartOfDay();
         LocalDateTime sundayDateTime = today.with(DayOfWeek.SUNDAY).plusDays(1).atStartOfDay();
 
-        List<Article> articles = articleJpaRepository.findTop10ByPublishedAtBetweenOrderByViewCountDesc(mondayDateTime, sundayDateTime);
+        List<Article> articles = articleJpaRepository.findTop10ByPublishedAtBetweenAndIsValidTrueOrderByViewCountDesc(mondayDateTime, sundayDateTime);
 
         return articles.stream()
                 .map(article -> new PopularArticleResponse(article.getId(), article.getSimpleTitle(), article.getViewCount()))

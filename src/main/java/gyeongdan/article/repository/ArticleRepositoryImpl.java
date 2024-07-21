@@ -26,5 +26,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
         return articleJpaRepository.save(article);
     }
 
-
+    public List<Article> findAllValidOrderByPublishedAtOrCreatedAtDesc() {
+        return articleJpaRepository.findAllValidOrderByPublishedAtOrCreatedAtDesc();
+    }
 }
