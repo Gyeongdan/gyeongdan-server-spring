@@ -19,14 +19,12 @@ public class EconomicTermController {
     public ResponseEntity<?> search(@RequestBody String question) throws Exception {
         Map<String, String> data = economicTermService.findEconomicTerm(question);
 
-        // 실패
+        // 경단어 찾기 실패
         if (data == null) {
-            CommonResponse<Map<String, String>> response = new CommonResponse<>(null, "경제 용어 찾기 실패", false);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.noContent().build();
         }
 
-        // 성공
-        CommonResponse<Map<String, String>> response = new CommonResponse<>(data, "경단어 찾기 성공", true);
-        return ResponseEntity.ok(response);
+        // 경단어 찾기 성공
+        return ResponseEntity.ok(new CommonResponse<>(data, "경단어 찾기 성공", true));
     }
 }
