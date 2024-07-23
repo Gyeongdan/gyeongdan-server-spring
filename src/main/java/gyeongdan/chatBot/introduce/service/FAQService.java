@@ -1,7 +1,7 @@
 package gyeongdan.chatBot.introduce.service;
 
 import gyeongdan.chatBot.introduce.model.FAQ;
-import gyeongdan.chatBot.introduce.repository.FAQRepository;
+import gyeongdan.chatBot.introduce.repository.FAQJPArepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class FAQService {
-    private final FAQRepository faqRepository;
+    private final FAQJPArepository faqRepository;
+
     public void createFAQ(String question, String answer) {
         if(checkDuplication(question, answer)) {
             throw new IllegalArgumentException("중복된 질문이 존재합니다.");
