@@ -17,10 +17,8 @@ public class FAQController {
     @GetMapping()
     public ResponseEntity<?> findAllFAQ() {
         List<FAQ> faqs = faqService.findAllFAQ();
-
-        CommonResponse<List<FAQ>> response =  new CommonResponse<>(faqs, "FAQ 조회 성공", true);
-
-        return ResponseEntity.ok(response);
+        
+        return ResponseEntity.ok(new CommonResponse<>(faqs, "FAQ 조회 성공", true));
     }
 
 

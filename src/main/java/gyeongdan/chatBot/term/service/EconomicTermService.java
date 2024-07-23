@@ -34,26 +34,26 @@ public class EconomicTermService {
         List<EconomicTerm> terms = economicTermRepository.findAll(); // 경제 용어 목록 불러오기
         logger.info("Loaded economic terms: {}", terms);
 
-        // 1. 한국어 키워드로 검색
-        Map<String, String> response = findTermByKeywords(korKeywords, terms);
+        // 1. 결합된 명사로 검색
+        Map<String, String> response = findTermByCombinedNouns(combinedNouns, terms);
         if (response != null) {
             return response;
         }
 
-        // 2. 질문 자체로 검색
-        response = findTermByQuestion(question, terms);
+        // 2. 한국어 키워드로 검색
+        response = findTermByKeywords(korKeywords, terms);
         if (response != null) {
             return response;
         }
 
-        // 3. 결합된 명사로 검색
-        response = findTermByCombinedNouns(combinedNouns, terms);
-        if (response != null) {
-            return response;
-        }
-
-        // 4. 영어 키워드로 검색
+        // 3. 영어 키워드로 검색
         response = findTermByKeywords(engKeywords, terms);
+        if (response != null) {
+            return response;
+        }
+
+        // 4. 질문 자체로 검색
+        response = findTermByQuestion(question, terms);
         if (response != null) {
             return response;
         }
@@ -63,6 +63,19 @@ public class EconomicTermService {
         return null;
     }
 
+    // bruteforce search
+    private Map<String, String> findTermByCombinedNouns(List<String> combinedNouns, List<EconomicTerm> terms) {
+        for (EconomicTerm term : terms) {
+            for (String combinedNoun : combinedNouns) {
+                if (term.getTerm().equalsIgnoreCase(combinedNoun)) {
+                    return createResponse(term);
+                }
+            }
+        }
+        return null;
+    }
+
+    // 형태소 분석기를 활용하여 search
     private Map<String, String> findTermByKeywords(Map<String, Integer> keywords, List<EconomicTerm> terms) {
         for (EconomicTerm term : terms) {
             for (String keyword : keywords.keySet()) {
@@ -75,6 +88,7 @@ public class EconomicTermService {
         return null;
     }
 
+    // 질문 자체로 search
     private Map<String, String> findTermByQuestion(String question, List<EconomicTerm> terms) {
         for (EconomicTerm term : terms) {
             if (term.getTerm().equalsIgnoreCase(question)) {
@@ -84,16 +98,6 @@ public class EconomicTermService {
         return null;
     }
 
-    private Map<String, String> findTermByCombinedNouns(List<String> combinedNouns, List<EconomicTerm> terms) {
-        for (EconomicTerm term : terms) {
-            for (String combinedNoun : combinedNouns) {
-                if (term.getTerm().equalsIgnoreCase(combinedNoun)) {
-                    return createResponse(term);
-                }
-            }
-        }
-        return null;
-    }
 
     private Map<String, String> createResponse(EconomicTerm term) {
         Map<String, String> responseMap = new HashMap<>();
