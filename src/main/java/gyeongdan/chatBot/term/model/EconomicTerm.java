@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity(name = "economic_terms")
+@Table(name = "economic_terms", schema = "gyeongdan")
 @Getter
 @Setter
 @Builder
